@@ -3,9 +3,9 @@ simulate.d<-function(nrep, d_overall, vi, n1, n2, mods){
   set.seed(nrep)
   d.s<-rnorm(length(n1),mean=d_overall, sd=sqrt(vi))
   vi.s<-(n1+n2)/n1/n2+d.s^2/(2*(n1+n2))
-  model.f1.s<-try(metafor::rma(d.s, vi.s, mods = mods, tau2=0, method="ML"))
-  model.f2.s<-try(metafor::rma(d.s, vi.s, mods = mods, tau2=0,method="REML"))
-  model.r1.s<-try(metafor::rma(d.s, vi.s, mods = mods, method="ML"))
+  model.f1.s<-try(metafor::rma(d.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
+  model.f2.s<-try(metafor::rma(d.s, vi.s, mods = mods, tau2=0,method="REML"), silent = TRUE)
+  model.r1.s<-try(metafor::rma(d.s, vi.s, mods = mods, method="ML"), silent = TRUE)
   model.r2.s<-try(metafor::rma(d.s, vi.s, mods = mods, method="REML"), silent = TRUE)
 
   #if (class(model.r1.s)!="try-error" & class(model.f1.s)!="try-error"){
@@ -28,9 +28,9 @@ simulate.z<-function(nrep, z_overall, vi, n, mods){
   set.seed(nrep)
   z.s<-rnorm(length(n), mean = z_overall, sd = sqrt(vi))
   vi.s<- vi
-  model.f1.s<-try(metafor::rma(z.s, vi.s, mods = mods, tau2=0, method="ML"))
-  model.f2.s<-try(metafor::rma(z.s, vi.s, mods = mods, tau2=0,method="REML"))
-  model.r1.s<-try(metafor::rma(z.s, vi.s, mods = mods, method="ML"))
+  model.f1.s<-try(metafor::rma(z.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
+  model.f2.s<-try(metafor::rma(z.s, vi.s, mods = mods, tau2=0,method="REML"), silent = TRUE)
+  model.r1.s<-try(metafor::rma(z.s, vi.s, mods = mods, method="ML"), silent = TRUE)
   model.r2.s<-try(metafor::rma(z.s, vi.s, mods = mods, method="REML"), silent = TRUE)
 
   #if (class(model.r1.s)!="try-error" & class(model.f1.s)!="try-error"){
@@ -58,9 +58,9 @@ simulate.OR<-function(nrep, lor_overall, vi, n, p_00, p_01, mods){
   n_11_s <- n*p_11_s
   vi.s <- 1/n_00_s+1/n_01_s+1/n_10_s+1/n_11_s
 
-  model.f1.s<-try(metafor::rma(lor.s, vi.s, mods = mods, tau2=0, method="ML"))
-  model.f2.s<-try(metafor::rma(lor.s, vi.s, mods = mods, tau2=0,method="REML"))
-  model.r1.s<-try(metafor::rma(lor.s, vi.s, mods = mods, method="ML"))
+  model.f1.s<-try(metafor::rma(lor.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
+  model.f2.s<-try(metafor::rma(lor.s, vi.s, mods = mods, tau2=0,method="REML"), silent = TRUE)
+  model.r1.s<-try(metafor::rma(lor.s, vi.s, mods = mods, method="ML"), silent = TRUE)
   model.r2.s<-try(metafor::rma(lor.s, vi.s, mods = mods, method="REML"), silent = TRUE)
 
   #if (class(model.r1.s)!="try-error" & class(model.f1.s)!="try-error"){
