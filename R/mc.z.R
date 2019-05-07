@@ -42,10 +42,10 @@ mc.z <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05)
   #########################################################################
   vi<-1/(n-3)
 
-  model.f1<-try(metafor::rma(d, vi, mods = mods, tau2=0, method="ML"))
-  model.f2<-try(metafor::rma(d, vi, mods = mods, tau2=0, method="REML"))
-  model.r1<-try(metafor::rma(d, vi, mods = mods, method="ML"))
-  model.r2<-try(metafor::rma(d, vi, mods = mods, method="REML"))
+  model.f1<-try(metafor::rma(z, vi, mods = mods, tau2=0, method="ML"))
+  model.f2<-try(metafor::rma(z, vi, mods = mods, tau2=0, method="REML"))
+  model.r1<-try(metafor::rma(z, vi, mods = mods, method="ML"))
+  model.r2<-try(metafor::rma(z, vi, mods = mods, method="REML"))
 
 
   #if (class(model.r2)!="try-error" ){
