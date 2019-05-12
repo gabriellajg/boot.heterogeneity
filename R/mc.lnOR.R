@@ -1,4 +1,4 @@
-#' Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Natural-Logarithm-Transformed Odds Ratio (lnOR)
+#' Natural-Logarithm-Transformed Odds Ratio (lnOR): Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model
 #'
 #' \code{mc.lnOR} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of natural-logarithm-transformed observed odds ratio (lnOR).
 #'

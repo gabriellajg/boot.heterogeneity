@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc.lnOR.R
 \name{mc.lnOR}
 \alias{mc.lnOR}
-\title{Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Natural-Logarithm-Transformed Odds Ratio (lnOR)}
+\title{Natural-Logarithm-Transformed Odds Ratio (lnOR): Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \source{
 C. Silagy (2003), Nicotine replacement therapy for smoking cessation (Cochrane Review). The Cochrane Library, 4, John Wiley \& Sons, Chichester.
 }

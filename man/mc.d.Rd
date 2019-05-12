@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc.d.R
 \name{mc.d}
 \alias{mc.d}
-\title{Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Standardized Mean Differences (d)}
+\title{Standardized Mean Differences (d): Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \usage{
 mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
   p_cut = 0.05, mc.include = FALSE)

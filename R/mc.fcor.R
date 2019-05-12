@@ -1,4 +1,4 @@
-#' Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Fisher-transformed Pearson's correlation
+#' Fisher-transformed Pearson's correlation: Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model
 #'
 #' \code{mc.fcor} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of Pearson's correlation coefficients transformed with Fisher's r-to-z transformation (z scores).
 #'

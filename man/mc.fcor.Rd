@@ -2,7 +2,7 @@
 % Please edit documentation in R/mc.fcor.R
 \name{mc.fcor}
 \alias{mc.fcor}
-\title{Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Fisher-transformed Pearson's correlation}
+\title{Fisher-transformed Pearson's correlation: Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \usage{
 mc.fcor(n, z, model = "random", mods = NULL, nrep = 10^4,
   p_cut = 0.05, mc.include = FALSE)

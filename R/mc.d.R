@@ -1,4 +1,4 @@
-#' Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Standardized Mean Differences (d)
+#' Standardized Mean Differences (d): Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model
 #'
 #' \code{mc.d} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
 #'
