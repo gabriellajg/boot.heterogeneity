@@ -34,7 +34,7 @@ The results of significances are classified as "sig" or "n.s" based on the cutof
 }
 \examples{
 # A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
-data(selfconcept)
+selfconcept <- mc.heterogeneity:::selfconcept
 # n1 and n2 are lists of samples sizes in two groups
 n1 <- selfconcept$n1
 n2 <- selfconcept$n2
@@ -47,7 +47,7 @@ mc.run <- mc.d(n1, n2, d, model = 'random', p_cut = 0.05)
 }
 
 # A hypothetical meta-analysis of 15 studies with 3 moderators.
-data(hypo_moder)
+hypo_moder <- mc.heterogeneity:::hypo_moder
 \dontrun{
 mc.run2 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
 }
