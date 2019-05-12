@@ -24,7 +24,7 @@
 
 #' @examples
 #' # A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
-#' data(mc.heterogeneity:::selfconcept)
+#' selfconcept <- mc.heterogeneity:::selfconcept
 #' # n1 and n2 are lists of samples sizes in two groups
 #' n1 <- selfconcept$n1
 #' n2 <- selfconcept$n2
