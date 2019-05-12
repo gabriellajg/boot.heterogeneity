@@ -22,7 +22,7 @@ mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
 
 \item{p_cut}{cutoff for p-values, which is the alpha level. Default to 0.05.}
 
-\item{mc.include}{If TRUE, Monte Carlo critical values will be included in the output.}
+\item{mc.include}{if true, Monte Carlo simulation results are included in the output (e.g., Monte Carlo critical values).}
 }
 \description{
 \code{mc.d} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
@@ -30,7 +30,7 @@ mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
 \details{
 This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
-The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default cutoff alpha level is 0.05
+The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }
 \examples{
 # A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
