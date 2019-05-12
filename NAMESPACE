@@ -3,3 +3,5 @@
 export(mc.OR)
 export(mc.d)
 export(mc.z)
+importFrom(metafor,fitstats)
+importFrom(metafor,rma)

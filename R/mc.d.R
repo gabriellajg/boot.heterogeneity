@@ -4,35 +4,42 @@
 #'
 #' This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 #'
-#' The results of significances are classified as "sig" or "n.s" based on the cutoff p-value. "sig" means that the residual variance is significantly different from zero wheras "n.s" means the residual variance is not significantly different from zero. The default cutoff p-value is 0.05
+#' The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default cutoff alpha level is 0.05
 #'
 #' @param n1 a vector of sample sizes from group 1 in each of the included studies.
 #' @param n2 a vector of sample sizes from group 2 in each of the included studies.
-#' @param d a vector of bias-corrected estimate of standardized mean differences (often reported as hedge's g)
+#' @param d a vector of unbiased estimates of standardized mean differences.
 #' @param model choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.
-#' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for details.
+#' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.
 #' @param nrep number of replications used in Monte Carlo Simulations. Default to 10^4.
-#' @param p_cut cutoff for p-values. Default to 0.05.
-#' @param mc.include if Monte Carlo simulation results are included in the output.
+#' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
+#' @param mc.include If TRUE, Monte Carlo critical values will be included in the output.
+
+#' @importFrom metafor rma
+#' @importFrom metafor fitstats
+
+#' @references Hedges, L. V. (1981). Distribution theory for glass’s estimator of effect size and related estimators. Journal of Educational and Behavioral Statistics, 6(2), 107–128.
+#' @references Hedges, L. V., Giaconia, R. M., & Gage, N. L. (1981). Meta-analysis of the effect of open and traditional instruction. Standford, CA: Stanford University, Program on Teaching Effectiveness.
+#' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 
 #' @examples
-#' # internal dataset for standardized mean differences (d)
-#' data(exdat_d1)
+#' # A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
+#' data(selfconcept)
 #' # n1 and n2 are lists of samples sizes in two groups
-#' n1 <- exdat_d1$n1
-#' n2 <- exdat_d1$n2
-#' # g is a list of standardized mean differences in the meta-analytical study
-#' g <- exdat_d1$g
-#' cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges & Olkin, 1985)
+#' n1 <- selfconcept$n1
+#' n2 <- selfconcept$n2
+#' # g is a list of biased estimates of standardized mean differences in the meta-analytical study
+#' g <- selfconcept$g
+#' cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 #' d <- cm*g
 #' \dontrun{
 #' mc.run <- mc.d(n1, n2, d, model = 'random', p_cut = 0.05)
 #' }
 #'
-#'# In the presense of moderators (cov.z1, cov.z2, cov.z3)
-#' data(exdat_d2)
+#'# A hypothetical meta-analysis of 15 studies with 3 moderators.
+#' data(hypo_moder)
 #' \dontrun{
-#' mc.run2 <- mc.d(exdat_d2$n1, exdat_d2$n2, exdat_d2$d, model = 'mixed', mods = cbind(exdat_d2$cov.z1, exdat_d2$cov.z2, exdat_d2$cov.z1), p_cut = 0.05)
+#' mc.run2 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
 #' }
 #' @export
 
@@ -119,8 +126,9 @@ mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   rownames(out) <- c('Qtest', 'mc.ML', 'mc.REML')
 
   if(mc.include){
-    out <- list(results = out, ML.c, REML.c, ML.sim, REML.sim)
+    out <- list(results = out, ML.crit = ML.c, REML.crit = REML.c)
   }
 
   return(out)
 }
+
