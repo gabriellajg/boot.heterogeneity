@@ -2,9 +2,9 @@
 #'
 #' \code{mc.d} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
 #'
-#' This function returns the test statistics as well as their significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
+#' This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 #'
-#' The results of significances are classified as "sig" or "n.s" based on the cutoff p-value. "sig" means that the residual variance is significantly different from zero wheras "n.s" means the residual variance is not significantly different from zero.
+#' The results of significances are classified as "sig" or "n.s" based on the cutoff p-value. "sig" means that the residual variance is significantly different from zero wheras "n.s" means the residual variance is not significantly different from zero. The default cutoff p-value is 0.05
 #'
 #' @param n1 a vector of sample sizes from group 1 in each of the included studies.
 #' @param n2 a vector of sample sizes from group 2 in each of the included studies.
@@ -13,22 +13,30 @@
 #' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for details.
 #' @param nrep number of replications used in Monte Carlo Simulations. Default to 10^4.
 #' @param p_cut cutoff for p-values. Default to 0.05.
-#'
+#' @param mc.include if Monte Carlo simulation results are included in the output.
 
 #' @examples
+#' # internal dataset for standardized mean differences (d)
+#' data(exdat_d1)
 #' # n1 and n2 are lists of samples sizes in two groups
-#' n1 <- c(100, 131, 40, 40, 97, 28, 60, 72, 87, 80, 79, 70, 36, 9, 14, 21, 133, 83)
-#' n2 <- c(180, 138, 40, 40, 47, 61, 55, 102, 45, 49, 55, 109, 93, 18, 16, 22, 124, 45)
-#' # g is a collection of standardized mean differences in the meta-analytical study
-#' g <- c(0.100, -0.162, -0.090, -0.049, -0.046, -0.010, -0.431, -0.261, 0.134, 0.019, 0.175, 0.056, 0.045, 0.103, 0.121, -0.482, 0.290, 0.342)
+#' n1 <- exdat_d1$n1
+#' n2 <- exdat_d1$n2
+#' # g is a list of standardized mean differences in the meta-analytical study
+#' g <- exdat_d1$g
 #' cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges & Olkin, 1985)
 #' d <- cm*g
 #' \dontrun{
-#' mc.run <- mc.d(n1, n2, d, model = 'random')
+#' mc.run <- mc.d(n1, n2, d, model = 'random', p_cut = 0.05)
+#' }
+#'
+#'# In the presense of moderators (cov.z1, cov.z2, cov.z3)
+#' data(exdat_d2)
+#' \dontrun{
+#' mc.run2 <- mc.d(exdat_d2$n1, exdat_d2$n2, exdat_d2$d, model = 'mixed', mods = cbind(exdat_d2$cov.z1, exdat_d$cov.z2, exdat_d$cov.z1), p_cut = 0.05)
 #' }
 #' @export
 
-mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05) {
+mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, mc.include = FALSE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -69,39 +77,50 @@ mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
     warning("Noncovergence rate in simulations is larger than 5%!")
   }
 
-  ML.c<-quantile(na.omit(unlist(find.c)[ c(TRUE,FALSE) ]),0.95)
-  REML.c<-quantile(na.omit(unlist(find.c)[ c(FALSE,TRUE) ]),0.95)
+  ML.sim <- na.omit(unlist(find.c)[ c(TRUE,FALSE) ])
+  REML.sim <- na.omit(unlist(find.c)[ c(FALSE,TRUE) ])
+  ML.c<-quantile(ML.sim, 0.95)
+  REML.c<-quantile(REML.sim, 0.95)
 
   if (sum(!class(model.r1)!="try-error" , !class(model.f1)!="try-error")==0){
       lllr1<-(metafor::fitstats(model.r1)-metafor::fitstats(model.f1))[1]*2
-      #p_lr1<-lllr1>ML.c
-      p_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
+      p_lr1<-sum(ML.sim>=lllr1)/nrep
+      res_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
   } else {
-    lllr1<-NA; p_lr1<-NA
+    lllr1<-NA; p_lr1<-NA; res_lr1<-NA
     }
 
   if (sum(!class(model.r2)!="try-error" , !class(model.f2)!="try-error")==0){
-      lllr2<-(metafor::fitstats(model.r2)-metafor::fitstats( model.f2))[1]*2
-      #p_lr2<-lllr2>REML.c
-      p_lr2<-ifelse(lllr2>REML.c, 'sig', 'n.s')
+      lllr2<-(metafor::fitstats(model.r2)-metafor::fitstats(model.f2))[1]*2
+      p_lr2<-sum(REML.sim>=lllr2)/nrep
+      res_lr2<-ifelse(lllr2>REML.c, 'sig', 'n.s')
   } else {
-    lllr2<-NA; p_lr2<-NA
+    lllr2<-NA; p_lr2<-NA; res_lr2<-NA
     }
 
   Q <- model.f1$QE
-  #p_Q<-model.f1$QEp< p_cut ### vary the size
-  p_Q<-ifelse(model.f1$QEp< p_cut, 'sig', 'n.s') ### vary the size
+  Qp <- model.r2$QEp
+  Qres<-ifelse(Qp< p_cut, 'sig', 'n.s') ### vary the size
   } else {
     Q<-NA
+    Qp<-NA
+    Qres<-NA
     lllr1<-NA
-    lllr2<-NA
     p_lr1<-NA
+    res_lr1<-NA
+    lllr2<-NA
     p_lr2<-NA
-    p_Q<-NA
+    res_lr2<-NA
   }
 
-  out <- data.frame(Q, p_Q, lllr1, p_lr1, lllr2, p_lr2)
-  colnames(out) <- c('QE', 'QEp', 'mc.ML', 'MLp', 'mc.REML', 'REMLp')
-  rownames(out) <- NULL
+  out <- data.frame(stat = c(Q, lllr1, lllr2), p_value = c(Qp, p_lr1, p_lr2), Heterogeneity = c(Qres, res_lr1, res_lr2))
+  #(Q, Qp, Qres, lllr1, p_lr1, res_lr1, lllr2, p_lr2, res_lr2)
+  #colnames(out) <- c('QE', 'QEp', 'QEres', 'ML', 'mc.MLp', 'mc.MLres', 'REML', 'mc.REMLp', 'REMLp')
+  rownames(out) <- c('Qtest', 'mc.ML', 'mc.REML')
+
+  if(!mc.include){
+    out <- list(results = out, ML.c, REML.c, ML.sim, REML.sim)
+  }
+
   return(out)
 }

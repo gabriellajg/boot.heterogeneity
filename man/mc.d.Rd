@@ -5,7 +5,7 @@
 \title{Monte Carlo Based Heterogeneity Test for Residual Variances in Random- or Mixed- Effects Model of Standardized Mean Differences (d)}
 \usage{
 mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
-  p_cut = 0.05)
+  p_cut = 0.05, mc.include = FALSE)
 }
 \arguments{
 \item{n1}{a vector of sample sizes from group 1 in each of the included studies.}
@@ -21,24 +21,34 @@ mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
 \item{nrep}{number of replications used in Monte Carlo Simulations. Default to 10^4.}
 
 \item{p_cut}{cutoff for p-values. Default to 0.05.}
+
+\item{mc.include}{if Monte Carlo simulation results are included in the output.}
 }
 \description{
 \code{mc.d} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
 }
 \details{
-This function returns the test statistics as well as their significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
+This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
-The results of significances are classified as "sig" or "n.s" based on the cutoff p-value. "sig" means that the residual variance is significantly different from zero wheras "n.s" means the residual variance is not significantly different from zero.
+The results of significances are classified as "sig" or "n.s" based on the cutoff p-value. "sig" means that the residual variance is significantly different from zero wheras "n.s" means the residual variance is not significantly different from zero. The default cutoff p-value is 0.05
 }
 \examples{
+# internal dataset for standardized mean differences (d)
+data(exdat_d1)
 # n1 and n2 are lists of samples sizes in two groups
-n1 <- c(100, 131, 40, 40, 97, 28, 60, 72, 87, 80, 79, 70, 36, 9, 14, 21, 133, 83)
-n2 <- c(180, 138, 40, 40, 47, 61, 55, 102, 45, 49, 55, 109, 93, 18, 16, 22, 124, 45)
-# g is a collection of standardized mean differences in the meta-analytical study
-g <- c(0.100, -0.162, -0.090, -0.049, -0.046, -0.010, -0.431, -0.261, 0.134, 0.019, 0.175, 0.056, 0.045, 0.103, 0.121, -0.482, 0.290, 0.342)
+n1 <- exdat_d1$n1
+n2 <- exdat_d1$n2
+# g is a list of standardized mean differences in the meta-analytical study
+g <- exdat_d1$g
 cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges & Olkin, 1985)
 d <- cm*g
 \dontrun{
-mc.run <- mc.d(n1, n2, d, model = 'random')
+mc.run <- mc.d(n1, n2, d, model = 'random', p_cut = 0.05)
+}
+
+# In the presense of moderators (cov.z1, cov.z2, cov.z3)
+data(exdat_d2)
+\dontrun{
+mc.run2 <- mc.d(exdat_d2$n1, exdat_d2$n2, exdat_d2$d, model = 'mixed', mods = cbind(exdat_d2$cov.z1, exdat_d$cov.z2, exdat_d$cov.z1), p_cut = 0.05)
 }
 }
