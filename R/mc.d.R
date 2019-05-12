@@ -32,7 +32,7 @@
 #'# In the presense of moderators (cov.z1, cov.z2, cov.z3)
 #' data(exdat_d2)
 #' \dontrun{
-#' mc.run2 <- mc.d(exdat_d2$n1, exdat_d2$n2, exdat_d2$d, model = 'mixed', mods = cbind(exdat_d2$cov.z1, exdat_d$cov.z2, exdat_d$cov.z1), p_cut = 0.05)
+#' mc.run2 <- mc.d(exdat_d2$n1, exdat_d2$n2, exdat_d2$d, model = 'mixed', mods = cbind(exdat_d2$cov.z1, exdat_d2$cov.z2, exdat_d2$cov.z1), p_cut = 0.05)
 #' }
 #' @export
 
@@ -118,7 +118,7 @@ mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   #colnames(out) <- c('QE', 'QEp', 'QEres', 'ML', 'mc.MLp', 'mc.MLres', 'REML', 'mc.REMLp', 'REMLp')
   rownames(out) <- c('Qtest', 'mc.ML', 'mc.REML')
 
-  if(!mc.include){
+  if(mc.include){
     out <- list(results = out, ML.c, REML.c, ML.sim, REML.sim)
   }
 
