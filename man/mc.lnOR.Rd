@@ -35,6 +35,7 @@ mc.lnOR(n_00, n_01, n_10, n_11, model = "random", mods = NULL,
 \code{mc.lnOR} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of natural-logarithm-transformed observed odds ratio (lnOR).
 }
 \details{
+For odds ratio, its standard error will be infinite if any one of the four cells in the contingency tables is zero. In this case, Haldane and Anscombe correction is used by adding 0.5 to each cell value (Anscombe, 1956; Haldane, 1940).
 This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
@@ -52,4 +53,11 @@ lnOR <- log(n_11*n_00/n_01/n_10)
 \dontrun{
 mc.run <- mc.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 }
+}
+\references{
+Anscombe, F. J. (1956). On estimating binomial response relations. Biometrika, 43(3/4), 461–464.
+
+Haldane, J. (1940). The mean and variance of| chi 2, when used as a test of homogeneity, when expectations are small. Biometrika, 31(3/4), 346–355.
+
+Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 }

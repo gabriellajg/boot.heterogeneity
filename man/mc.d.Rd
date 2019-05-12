@@ -4,17 +4,19 @@
 \alias{mc.d}
 \title{Standardized Mean Differences (d): Monte Carlo Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \usage{
-mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
-  p_cut = 0.05, mc.include = FALSE)
+mc.d(n1, n2, est, model = "random", adjust = FALSE, mods = NULL,
+  nrep = 10^4, p_cut = 0.05, mc.include = FALSE)
 }
 \arguments{
 \item{n1}{a vector of sample sizes from group 1 in each of the included studies.}
 
 \item{n2}{a vector of sample sizes from group 2 in each of the included studies.}
 
-\item{d}{a vector of unbiased estimates of standardized mean differences.}
+\item{est}{a vector of unbiased estimates of standardized mean differences.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
+
+\item{adjust}{if biased estimates (i.e., g values) are provided, \code{adjust} must be set to \code{TRUE} to compensate for small sample bias. By default, \code{adjust} is set to \code{FALSE}.}
 
 \item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.}
 
@@ -28,6 +30,8 @@ mc.d(n1, n2, d, model = "random", mods = NULL, nrep = 10^4,
 \code{mc.d} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
 }
 \details{
+For standardized mean difference, if the biased estimates (i.e., g values) are provided, \code{adjust=TRUE} can be specified to obtain the corresponding unbiased estimates.
+
 This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
@@ -43,13 +47,15 @@ g <- selfconcept$g
 cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 d <- cm*g
 \dontrun{
-mc.run <- mc.d(n1, n2, d, model = 'random', p_cut = 0.05)
+mc.run <- mc.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
+# is equivalent to:
+mc.run2 <- mc.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
 }
 
 # A hypothetical meta-analysis of 15 studies with 3 moderators.
 hypo_moder <- mc.heterogeneity:::hypo_moder
 \dontrun{
-mc.run2 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
+mc.run3 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
 }
 }
 \references{

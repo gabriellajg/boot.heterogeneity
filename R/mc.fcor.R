@@ -16,7 +16,9 @@
 #'
 #' @importFrom metafor rma
 #' @importFrom metafor fitstats
+#'
 #' @references Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation seeking. New York, NY: Cambridge University Press.
+#' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 #'
 #' @examples
 #' # A meta-analysis of 13 studies studying the correlation between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).

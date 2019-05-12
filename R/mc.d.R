@@ -2,13 +2,16 @@
 #'
 #' \code{mc.d} returns the Monte Carlo based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
 #'
+#' For standardized mean difference, if the biased estimates (i.e., g values) are provided, \code{adjust=TRUE} can be specified to obtain the corresponding unbiased estimates.
+#'
 #' This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Monte Carlo Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Monte Carlo Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 #'
 #' The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 #'
 #' @param n1 a vector of sample sizes from group 1 in each of the included studies.
 #' @param n2 a vector of sample sizes from group 2 in each of the included studies.
-#' @param d a vector of unbiased estimates of standardized mean differences.
+#' @param est a vector of unbiased estimates of standardized mean differences.
+#' @param adjust if biased estimates (i.e., g values) are provided, \code{adjust} must be set to \code{TRUE} to compensate for small sample bias. By default, \code{adjust} is set to \code{FALSE}.
 #' @param model choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.
 #' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.
 #' @param nrep number of replications used in Monte Carlo Simulations. Default to 10^4.
@@ -33,17 +36,19 @@
 #' cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 #' d <- cm*g
 #' \dontrun{
-#' mc.run <- mc.d(n1, n2, d, model = 'random', p_cut = 0.05)
+#' mc.run <- mc.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
+#' # is equivalent to:
+#' mc.run2 <- mc.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
 #' }
 #'
 #'# A hypothetical meta-analysis of 15 studies with 3 moderators.
 #' hypo_moder <- mc.heterogeneity:::hypo_moder
 #' \dontrun{
-#' mc.run2 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
+#' mc.run3 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
 #' }
 #' @export
 
-mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, mc.include = FALSE) {
+mc.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, mc.include = FALSE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -57,12 +62,18 @@ mc.d <- function(n1, n2, d, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   }
 
   #########################################################################
-  vi<-(n1+n2)/n1/n2+d^2/(2*(n1+n2))
+  # adjustment for bias
+  if(adjust){
+    cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
+    est <- cm*est
+  }
+  #########################################################################
+  vi<-(n1+n2)/n1/n2+est^2/(2*(n1+n2))
 
-  model.f1<-try(metafor::rma(d, vi, mods = mods, tau2=0, method="ML"))
-  model.f2<-try(metafor::rma(d, vi, mods = mods, tau2=0, method="REML"))
-  model.r1<-try(metafor::rma(d, vi, mods = mods, method="ML"))
-  model.r2<-try(metafor::rma(d, vi, mods = mods, method="REML"))
+  model.f1<-try(metafor::rma(est, vi, mods = mods, tau2=0, method="ML"))
+  model.f2<-try(metafor::rma(est, vi, mods = mods, tau2=0, method="REML"))
+  model.r1<-try(metafor::rma(est, vi, mods = mods, method="ML"))
+  model.r2<-try(metafor::rma(est, vi, mods = mods, method="REML"))
 
 
   #if (class(model.r2)!="try-error" ){

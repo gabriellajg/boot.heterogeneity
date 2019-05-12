@@ -54,6 +54,17 @@ simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00, n_01, mods){
   n_01_s <- n_01
   n_10_s <- n_00_s*(n-n_00_s-n_01_s)/(n_00_s + n_01_s*exp(lnOR.s))
   n_11_s <- n - n_00_s - n_01_s - n_10_s
+  #########################################################################
+  # zero count correction
+  df <- cbind(n_00_s, n_01_s, n_10_s, n_11_s)
+  if(any(df == 0)){
+    df <- df + 0.5*(df==0)
+    n_00_s <- df$n_00_s
+    n_01_s <- df$n_01_s
+    n_10_s <- df$n_10_s
+    n_11_s <- df$n_11_s
+  }
+  #########################################################################
   vi.s <- 1/n_00_s+1/n_01_s+1/n_10_s+1/n_11_s
 
   model.f1.s<-try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
