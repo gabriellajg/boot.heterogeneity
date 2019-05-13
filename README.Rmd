@@ -17,7 +17,9 @@ knitr::opts_chunk$set(
 <!-- badges: start -->
 <!-- badges: end -->
 
-The goal of mc.heterogeneity is to ...
+The package mc.heterogeneity implements a Monte Carlo Based Heterogeneity Test for standardized mean differences (d), Fisher-transformed Pearson's correlations (r), and natural-logarithm-transformed odds ratio (OR) in Meta-Analysis Studies. 
+
+Depending on the presence of moderators, this Monte Carlo Based Test can be implemented in the random or mixed-effects model. This package uses rma() function from the R package metafor to obtain parameter estimates and likelihood, so installation of R package metafor is required.
 
 ## Installation
 
@@ -31,29 +33,16 @@ And the development version from [GitHub](https://github.com/) with:
 
 ``` r
 # install.packages("devtools")
+# library(devtools)
 devtools::install_github("gabriellajg/mc.heterogeneity")
 ```
-## Example
 
-This is a basic example which shows you how to solve a common problem:
+## Vignette
+
+The vignette illustrates usage of functions in mc.heterogeneity and interpretation of the output. Type the following code to get the complete vignette:
 
 ```{r example}
 library(mc.heterogeneity)
-## basic example code
+vignette("mc.heterogeneity")
 ```
 
-What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so:
-
-```{r cars}
-summary(cars)
-```
-
-You'll still need to render `README.Rmd` regularly, to keep `README.md` up-to-date.
-
-You can also embed plots, for example:
-
-```{r pressure, echo = FALSE}
-plot(pressure)
-```
-
-In that case, don't forget to commit and push the resulting figure files, so they display on GitHub!
