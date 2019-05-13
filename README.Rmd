@@ -29,13 +29,26 @@ You can install the released version of mc.heterogeneity from [CRAN](https://CRA
 install.packages("mc.heterogeneity")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+And the development version from [GitHub](https://github.com/gabriellajg/mc.heterogeneity) with:
 
 ``` r
 # install.packages("devtools")
 # library(devtools)
 devtools::install_github("gabriellajg/mc.heterogeneity")
 ```
+
+If you have already installed this package locally, you need to override the previous version with force installation:
+
+``` r
+devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE)
+```
+
+To also install the vignette that comes with the package:
+
+``` r
+devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE, build_vignettes = TRUE)
+```
+
 
 ## Vignette
 

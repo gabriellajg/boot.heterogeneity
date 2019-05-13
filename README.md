@@ -26,7 +26,8 @@ You can install the released version of mc.heterogeneity from
 install.packages("mc.heterogeneity")
 ```
 
-And the development version from [GitHub](https://github.com/) with:
+And the development version from
+[GitHub](https://github.com/gabriellajg/mc.heterogeneity) with:
 
 ``` r
 # install.packages("devtools")
@@ -34,10 +35,25 @@ And the development version from [GitHub](https://github.com/) with:
 devtools::install_github("gabriellajg/mc.heterogeneity")
 ```
 
+If you have already installed this package locally, you need to override
+the previous version with force installation:
+
+``` r
+devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE)
+```
+
+To also install the vignette that comes with the
+package:
+
+``` r
+devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE, build_vignettes = TRUE)
+```
+
 ## Vignette
 
 The vignette illustrates usage of functions in mc.heterogeneity and
-interpretation of the output. For details of the vignette:
+interpretation of the output. Type the following code to get the
+complete vignette:
 
 ``` r
 library(mc.heterogeneity)
