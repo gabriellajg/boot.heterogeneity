@@ -1,0 +1,27 @@
+---
+title: "mc.heterogeneity"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{mc.heterogeneity}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+library(mc.heterogeneity)
+```
+
+```{r}
+library(devtools)
+#devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE);
+#devtools::install_github(build_vignettes = TRUE)
+library(mc.heterogeneity)
+```
+
