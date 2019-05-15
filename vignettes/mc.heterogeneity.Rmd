@@ -25,7 +25,7 @@ In the following examples, we describe how to use our package mc.heterogeneity t
 
 * The three example datasets are internal datasets in our package, but applied researchers can load the datasets using mc.heterogeneity:::[dataset name]. In each of the example datasets, the rows correspond to studies in meta-analysis, and the columns correspond to required input for that study, which includes, but is not limited to effect size, sample size(s), and moderators. 
 
-* The example R codes adopt the default value for some of the arguments (e.g., default cutoff p-vakue 0.05). To change the defaults, use help() to see more details for each of the functions. 
+* The example R codes adopt the default value for some of the arguments (e.g., default cutoff alpha level is 0.05). To change the defaults, use help() to see more details for each of the functions. 
 
 * The output are formatted to have the same layout. 
 
@@ -35,13 +35,13 @@ We also include a "Empirical Illustration" section in the article to discuss the
 
 Install the released version of mc.heterogeneity from [CRAN](https://CRAN.R-project.org) with:
 
-```{r setup, eval=FALSE}
+```{r setup, eval = FALSE}
 install.packages("mc.heterogeneity")
 ```
 
 Or install the development version from [GitHub](https://github.com/gabriellajg/mc.heterogeneity) with:
 
-```{r, eval=FALSE}
+```{r, eval = FALSE}
 #install.packages("devtools")
 library(devtools)
 devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE, build_vignettes = TRUE)
@@ -82,17 +82,31 @@ d <- cm*g
 
 Run the heterogeneity test using `mc.d()`:
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, results = 'hide'}
 mc.run <- mc.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
 ```
 
 Alternatively, such an adjustment could be performed within the function by specifying `adjust = TRUE`:
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, results = 'hide'}
 mc.run2 <- mc.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
 ```
 
-### 1.1 With moderators
+`mc.run` and `mc.run2` will return the same results:
+
+```{r, eval=FALSE}
+mc.run
+mc.run2
+```
+
+* The first line presents the results of Q-test following Restricted Maximum-Likelihood (REML) of a random-effects model. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level of either 0.05 or 0.1, this statistic is n.s (not significant). The variability in the observed standardized mean differences (d) is not larger than sampling variability alone, and the assumption of homogeneity is not rejected. 
+
+* The second line presents the results following MC-ML-LRT. The statistic is 1.61 and the Monte-Carlo based p-value is 0.051. The assumption of homogeneity is not rejected with a cutoff alpha level of 0.05 but will be rejected at a alpha level of 0.1. 
+
+* The third line presents the results following MC-REML-LRT. The statistic is 2.04 and the Monte-Carlo based p-value is 0.053. Similar to those following MC-ML-LR, the assumption of homogeneity is not rejected with a cutoff alpha level of 0.05 but will be rejected at a alpha level of 0.1. 
+
+
+### 1.2 With moderators
 
 Load an hypothetical dataset `hypo_moder` first: 
 
@@ -108,14 +122,31 @@ head(hypo_moder)
 
 Again, run the heterogeneity test using `mc.d()` with all moderators included in a matrix `mods` and model type specified as `model = 'mixed'`:
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, results = 'hide'}
 mc.run3 <- mc.d(n1 = hypo_moder$n1, 
                 n2 = hypo_moder$n2, 
                 est = hypo_moder$d, 
                 model = 'mixed', 
-                mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), 
+                mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), 
                 p_cut = 0.05)
 ```
+
+In the presence of moderators, the results `mc.run3` will be different from those in `mc.run` and `mc.run2`:
+
+```{r, eval=FALSE}
+mc.run3
+```
+
+* The first line presents the results of Q-test following Restricted Maximum-Likelihood (REML) of a mixed-effects model in the presence of moderators. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level of either 0.05 or 0.1, this statistic is n.s (not significant). The variability in the observed standardized mean differences (d) is not larger than sampling variability alone, and the assumption of homogeneity is not rejected. 
+
+* The second line presents the results following MC-ML-LRT. The statistic is 1.61 and the Monte-Carlo based p-value is 0.051. The assumption of homogeneity is not rejected with a cutoff alpha level of 0.05 but will be rejected at a alpha level of 0.1. 
+
+* The third line presents the results following MC-REML-LRT. The statistic is 2.04 and the Monte-Carlo based p-value is 0.053. Similar to those following MC-ML-LR, the assumption of homogeneity is not rejected with a cutoff alpha level of 0.05 but will be rejected at a alpha level of 0.1. 
+
+
+A test for (residual) heterogeneity is automatically carried out by the function. Without moderators in the model, this is simply Cochran's Q-test (Cochran, 1954), which tests whether the variability in the observed effect sizes or outcomes is larger than would be expected based on sampling variability alone. A significant test suggests that the true effects or outcomes are heterogeneous. 
+
+When moderators are included in the model, this is the Q_E-test for residual heterogeneity, which tests whether the variability in the observed effect sizes or outcomes not accounted for by the moderators included in the model is larger than would be expected based on sampling variability alone.
 
 #### For the following two examples (Fisher-transformed Pearson's correlations r; Natural-logarithm-transformed odds ratio OR), no moderators are included, but one can simply include moderators as in section 1.5. 
 
@@ -142,8 +173,14 @@ z <- 1/2*log((1+r)/(1-r))
 
 Run the heterogeneity test using `mc.fcor()`:
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, results = 'hide'}
 mc.run <- mc.fcor(n, z, model = 'random', p_cut = 0.05)
+```
+
+The test of between-study heterogeneity has the following results:
+
+```{r, eval=FALSE}
+mc.run
 ```
 
 ### 3. Natural-logarithm-transformed odds ratio (OR)
@@ -167,7 +204,7 @@ n_10 <- smoking$tt - smoking$qt # receive treatement but not stop smoking
 n_11 <- smoking$qt # receive treatement and stop smoking
 ```
 
-The log odds ratios can be computed, but they are not needed by mc.lnOR():
+The log odds ratios can be computed, but they are not needed by `mc.lnOR()`:
 
 ```{r}
 lnOR <- log(n_11*n_00/n_01/n_10)
@@ -176,8 +213,13 @@ lnOR
 
 Run the heterogeneity test using `mc.lnOR()`:
 
-```{r, eval=FALSE}
+```{r, eval=FALSE, results = 'hide'}
 mc.run <- mc.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 ```
 
+The test of between-study heterogeneity has the following results:
+
+```{r, eval=FALSE}
+mc.run
+```
 

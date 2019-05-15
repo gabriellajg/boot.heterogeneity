@@ -37,7 +37,7 @@ And the development version from [GitHub](https://github.com/gabriellajg/mc.hete
 devtools::install_github("gabriellajg/mc.heterogeneity")
 ```
 
-If you have already installed this package locally, you need to override the previous version with force installation:
+If you have already installed this package locally, you need to override the previous version with `force` installation:
 
 ``` r
 devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE)
