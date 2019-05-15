@@ -58,5 +58,4 @@ complete vignette:
 ``` r
 library(mc.heterogeneity)
 vignette("mc.heterogeneity")
-#> Warning: vignette 'mc.heterogeneity' not found
 ```

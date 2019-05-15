@@ -33,9 +33,9 @@ The results of significances are classified as "sig" or "n.s" based on the cutof
 \examples{
 # A meta-analysis of 13 studies studying the correlation between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
 sensation <- mc.heterogeneity:::sensation
-# n is a list of samples sizes in the meta-analytical study.
+# n is a list of samples sizes
 n <- sensation$n
-# Pearson's Correction
+# Pearson's correlation
 r <- sensation$r
 # Fisher's Transformation
 z <- 1/2*log((1+r)/(1-r))

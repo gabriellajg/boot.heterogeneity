@@ -54,7 +54,7 @@ devtools::install_github("gabriellajg/mc.heterogeneity", force = TRUE, build_vig
 
 The vignette illustrates usage of functions in mc.heterogeneity and interpretation of the output. Type the following code to get the complete vignette:
 
-```{r example}
+```{r example, eval = FALSE}
 library(mc.heterogeneity)
 vignette("mc.heterogeneity")
 ```

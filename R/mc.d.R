@@ -44,7 +44,7 @@
 #'# A hypothetical meta-analysis of 15 studies with 3 moderators.
 #' hypo_moder <- mc.heterogeneity:::hypo_moder
 #' \dontrun{
-#' mc.run3 <- mc.d(hypo_moder$n1, hypo_moder$n2, hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
+#' mc.run3 <- mc.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z1), p_cut = 0.05)
 #' }
 #' @export
 

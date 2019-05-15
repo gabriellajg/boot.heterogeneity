@@ -11,9 +11,9 @@ mc.lnOR(n_00, n_01, n_10, n_11, model = "random", mods = NULL,
   nrep = 10^4, p_cut = 0.05, mc.include = FALSE)
 }
 \arguments{
-\item{n_00}{a vector of number of participants who score negatively on both Y1 and Y2.}
+\item{n_00}{a vector of number of participants who score negatively on both Y1 and Y2 (e.g., mortality cases in the control group).}
 
-\item{n_01}{a vector of number of participants who score negatively on Y1 and positively on Y2.}
+\item{n_01}{a vector of number of participants who score negatively on Y1 and positively on Y2  (e.g., recovery cases in the control group).}
 
 \item{n_10}{a vector of number of participants who score positively on Y1 and negatively on Y2 (e.g., mortality cases in the experimental group).}
 

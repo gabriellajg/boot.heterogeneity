@@ -8,8 +8,8 @@
 #'
 #' The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 #'
-#' @param n_00 a vector of number of participants who score negatively on both Y1 and Y2.
-#' @param n_01 a vector of number of participants who score negatively on Y1 and positively on Y2.
+#' @param n_00 a vector of number of participants who score negatively on both Y1 and Y2 (e.g., mortality cases in the control group).
+#' @param n_01 a vector of number of participants who score negatively on Y1 and positively on Y2  (e.g., recovery cases in the control group).
 #' @param n_10 a vector of number of participants who score positively on Y1 and negatively on Y2 (e.g., mortality cases in the experimental group).
 #' @param n_11 a vector of number of participants who score positively on both Y1 and Y2 (e.g., recovery cases in the experimental group).
 #' @param lnOR a vector of natural-logarithm-transformed odds ratio in the included studies, which is calculated as ln(n11*n00/n01/n10)
