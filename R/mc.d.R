@@ -26,7 +26,8 @@
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 
 #' @examples
-#' # A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
+#' # A meta-analysis of 18 studies in which the effect of open versus traditional
+#' # education on students' self-concept was studied (Hedges et al., 1981).
 #' selfconcept <- mc.heterogeneity:::selfconcept
 #' # n1 and n2 are lists of samples sizes in two groups
 #' n1 <- selfconcept$n1
@@ -44,7 +45,8 @@
 #'# A hypothetical meta-analysis of 15 studies with 3 moderators.
 #' hypo_moder <- mc.heterogeneity:::hypo_moder
 #' \dontrun{
-#' mc.run3 <- mc.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
+#' mc.run3 <- mc.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
+#' mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 #' }
 #' @export
 

@@ -14,7 +14,7 @@ Imports: stats, metafor, utils
 Suggests: 
     base,
     HSAUR2,
-    roxygen,
+    roxygen2,
     knitr,
     rmarkdown
 BugReports: https://github.com/gabriellajg/mc.heterogeneity/issues

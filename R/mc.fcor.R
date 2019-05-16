@@ -21,7 +21,8 @@
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 #'
 #' @examples
-#' # A meta-analysis of 13 studies studying the correlation between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
+#' # A meta-analysis of 13 studies studying the correlation between sensation
+#' # seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
 #' sensation <- mc.heterogeneity:::sensation
 #' # n is a list of samples sizes
 #' n <- sensation$n

@@ -37,7 +37,8 @@ This function returns the test statistics as well as their p-value and significa
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }
 \examples{
-# A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
+# A meta-analysis of 18 studies in which the effect of open versus traditional
+# education on students' self-concept was studied (Hedges et al., 1981).
 selfconcept <- mc.heterogeneity:::selfconcept
 # n1 and n2 are lists of samples sizes in two groups
 n1 <- selfconcept$n1
@@ -55,7 +56,8 @@ mc.run2 <- mc.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
 # A hypothetical meta-analysis of 15 studies with 3 moderators.
 hypo_moder <- mc.heterogeneity:::hypo_moder
 \dontrun{
-mc.run3 <- mc.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed', mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
+mc.run3 <- mc.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
+mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 }
 }
 \references{

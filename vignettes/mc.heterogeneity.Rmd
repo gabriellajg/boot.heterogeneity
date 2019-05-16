@@ -23,13 +23,13 @@ Inclusion of moderators is an option for researchers who are interested in measu
 
 In the following examples, we describe how to use our package mc.heterogeneity to test the between-study heterogeneity for each of the effect sizes considered in the current study. *Datasets*, *R codes*, and *output* are provided for each example so that applied researchers can easily replicate the examples and modify the codes for their own datasets. 
 
-* The three example datasets are internal datasets in our package, but applied researchers can load the datasets using mc.heterogeneity:::[dataset name]. In each of the example datasets, the rows correspond to studies in meta-analysis, and the columns correspond to required input for that study, which includes, but is not limited to effect size, sample size(s), and moderators. 
+* The three example datasets are internal datasets in our package, but researchers can load the datasets using mc.heterogeneity:::[dataset name]. In each of the example datasets, the rows correspond to studies in meta-analysis, and the columns correspond to required input for that study, which includes, but is not limited to effect size, sample size(s), and moderators. 
 
-* The example R codes adopt the default value for some of the arguments (e.g., default cutoff alpha level is 0.05). To change the defaults, use help() to see more details for each of the functions. 
+* The example R codes adopt the default value for some of the arguments (e.g., default nominal alpha level is 0.05). To change the defaults, use help() to see more details for each of the functions. 
 
 * The output are formatted to have the same layout. 
 
-We also include a "Empirical Illustration" section in the article to discuss the following examples. 
+We also include a "Empirical Illustration" section in the main text of the article to discuss the following examples. 
 
 ## 0. Installation of the package
 
@@ -110,11 +110,11 @@ mc.run2
 #> mc.REML  2.037578 0.053100           n.s
 ```
 
-* The first line presents the results of Q-test following Restricted Maximum-Likelihood (REML) of a random-effects model. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level of either 0.05 or 0.1, this statistic is n.s (not significant). The variability in the observed standardized mean differences (d) is not larger than sampling variability alone, and the assumption of homogeneity is not rejected. 
+* The first line presents the results of Q-test of a random-effects model. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level (i.e., nominal alpha level) of either 0.05 or 0.1, this statistic is n.s (not significant). The homogeneity assumption is not rejected. 
 
-* The second line presents the results following MC-ML-LRT. The statistic is 1.61 and the Monte-Carlo based p-value is 0.051. The assumption of homogeneity is not rejected with a cutoff alpha level of 0.05 but will be rejected at a alpha level of 0.1. 
+* The second line presents the results of MC-ML-LRT. The ML-LRT statistic is 1.61 and the Monte-Carlo based p-value is 0.051. The assumption of homogeneity is not rejected with an alpha level of 0.05 but will be rejected at an alpha level of 0.1. 
 
-* The third line presents the results following MC-REML-LRT. The statistic is 2.04 and the Monte-Carlo based p-value is 0.053. Similar to those following MC-ML-LR, the assumption of homogeneity is not rejected with a cutoff alpha level of 0.05 but will be rejected at a alpha level of 0.1. 
+* The third line presents the results of MC-REML-LRT. The REML-LRT statistic is 2.04 and the Monte-Carlo based p-value is 0.053. Similar to the results of MC-ML-LR, the assumption of homogeneity is not rejected with an alpha level of 0.05 but will be rejected at an alpha level of 0.1. 
 
 
 ### 1.2 With moderators
@@ -142,7 +142,7 @@ mc.run3 <- mc.d(n1 = hypo_moder$n1,
                 p_cut = 0.05)
 ```
 
-In the presence of moderators, the results `mc.run3` will be different from those in `mc.run` and `mc.run2`:
+In the presence of moderators, the results in `mc.run3` will be different from those in `mc.run` and `mc.run2`:
 
 ```{r, eval=FALSE}
 mc.run3
@@ -152,15 +152,15 @@ mc.run3
 #> mc.REML  9.283428 0.0004000000        	   sig
 ```
 
-In the presence of moderators, the function above tests whether the variability in the observed standardized mean differences (d) after accounting for the moderators included in the model is larger than sampling variability alone (Viechtbauer, 2010).
+In the presence of moderators, the function above tests whether the variability in the true standardized mean differences after accounting for the moderators included in the model is larger than sampling variability alone (Viechtbauer, 2010).
 
-* In the first line, the Q-statistic is Q(df = 11) = 31.85 and the associated p-value is 0.0008. This statistic is significant (sig) at a alpha level of 0.05, meaning that the true effect sizes after accounting for the moderators are heterogeneous. 
+* In the first line, the Q-statistic is Q(df = 11) = 31.85 and the associated p-value is 0.0008. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes after accounting for the moderators are heterogeneous. 
 
-* In the second line, the statistic following MC-ML-LRT is 5.19 and the Monte-Carlo based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at a alpha level of 0.05. 
+* In the second line, the ML-LRT statistic is 5.19 and the Monte-Carlo based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
 
-* In the third line, the statistic following MC-REML-LRT is 9.28 and the Monte-Carlo based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at a alpha level of 0.05. 
+* In the third line, the REML-LRT statistic is 9.28 and the Monte-Carlo based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
 
-#### For the following two examples (Fisher-transformed Pearson's correlations r; Natural-logarithm-transformed odds ratio OR), no moderators are included, but one can simply include moderators as in section 1.5. 
+#### For the following two examples (Fisher-transformed Pearson's correlations r; Natural-logarithm-transformed odds ratio OR), no moderators are included, but one can simply include moderators as in section 1.2. 
 
 ### 2. Fisher-transformed Pearson's correlations (r)
 
@@ -199,11 +199,11 @@ mc.run
 #> mc.REML  6.133111 0.00400000           sig
 ```
 
-* In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at a alpha level of 0.05, meaning that the true effect sizes are heterogeneous. 
+* In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes are heterogeneous. 
 
-* In the second line, the statistic following MC-ML-LRT is 5.20 and the Monte-Carlo based p-value is 0.004. This means that the true effect sizes are heterogeneous at a alpha level of 0.05. 
+* In the second line, the ML-LRT statistic is 5.20 and the Monte-Carlo based p-value is 0.004. This means that the true effect sizes are heterogeneous at an alpha level of 0.05. 
 
-* In the third line, the statistic following MC-REML-LRT is 6.13 and the Monte-Carlo based p-value is 0.0004. This means that the true effect sizes are heterogeneous at a alpha level of 0.05. 
+* In the third line, the REML-LRT statistic is 6.13 and the Monte-Carlo based p-value is 0.0004. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.
 
 
 ### 3. Natural-logarithm-transformed odds ratio (OR)
@@ -250,9 +250,8 @@ mc.run
 #> mc.REML  3.071329 0.02240000           sig
 ```
 
-* In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at a alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected. 
+* In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected. 
 
-* In the second line, the statistic following MC-ML-LRT is 2.56 and the Monte-Carlo based p-value is 0.022. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at a alpha level of 0.05. 
+* In the second line, the ML-LRT statistic is 2.56 and the Monte-Carlo based p-value is 0.022. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05. 
 
-* In the third line, the statistic following MC-REML-LRT is 3.07 and the Monte-Carlo based p-value is 0.022. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at a alpha level of 0.05. 
-
+* In the third line, the REML-LRT statistic is 3.07 and the Monte-Carlo based p-value is 0.022. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.

@@ -31,7 +31,8 @@ This function returns the test statistics as well as their p-value and significa
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero wheras "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }
 \examples{
-# A meta-analysis of 13 studies studying the correlation between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
+# A meta-analysis of 13 studies studying the correlation between sensation
+# seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
 sensation <- mc.heterogeneity:::sensation
 # n is a list of samples sizes
 n <- sensation$n
