@@ -16,5 +16,5 @@ Suggests:
     HSAUR2,
     roxygen2,
     knitr,
-    rmarkdown
+    rmarkdown,
 VignetteBuilder: knitr
