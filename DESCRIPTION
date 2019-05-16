@@ -17,5 +17,4 @@ Suggests:
     roxygen2,
     knitr,
     rmarkdown
-BugReports: https://github.com/gabriellajg/mc.heterogeneity/issues
 VignetteBuilder: knitr
