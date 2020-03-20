@@ -117,6 +117,6 @@ lnOR
 #  boot.run
 #  #>                  stat    p_value    Heterogeneity
 #  #> Qtest       34.873957  0.09050857             n.s
-#  #> boot.Qtest  34.873957  0.05970000             n.s
-#  #> boot.REML    3.071329  0.02240000             sig
+#  #> boot.Qtest  34.873957  0.08750000             n.s
+#  #> boot.REML    3.071329  0.03630000             sig
 

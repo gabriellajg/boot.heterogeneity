@@ -252,12 +252,12 @@ The test of between-study heterogeneity has the following results:
 boot.run
 #>                  stat    p_value    Heterogeneity
 #> Qtest       34.873957  0.09050857             n.s
-#> boot.Qtest  34.873957  0.05970000             n.s
-#> boot.REML    3.071329  0.02240000             sig
+#> boot.Qtest  34.873957  0.08750000             n.s
+#> boot.REML    3.071329  0.03630000             sig
 ```
 
 * In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected. 
 
-* In the second line, the Q-statistic is still 34.87 but the bootstrap-based p-value is 0.06. This means that the assumption of homogeneity marginally significant but not rejected at an alpha level of 0.05. 
+* In the second line, the Q-statistic is still 34.87 but the bootstrap-based p-value is 0.088. This means that the assumption of homogeneity marginally significant but not rejected at an alpha level of 0.05. 
 
-* In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.022. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.
+* In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.036. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.

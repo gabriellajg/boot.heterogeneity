@@ -52,13 +52,13 @@ simulate.z<-function(nrep, z_overall, vi, n, mods){
 #n4=dat$qt;   nt=dat$tt; n2=dat$qc; nc=dat$tc;n3=nt-n4; n1=nc-n2
 #n_11                    n_01                 n_10      n_00
 
-simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00, n_01, mods){
+simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00_s, n_01_s, n_10_s, n_11_s, mods){
   set.seed(nrep)
-  lnOR.s <- stats::rnorm(length(n),mean=lnOR_overall, sd=sqrt(vi))
-  n_00_s <- n_00
-  n_01_s <- n_01
-  n_10_s <- n_00_s*(n-n_00_s-n_01_s)/(n_00_s + n_01_s*exp(lnOR.s))
-  n_11_s <- n - n_00_s - n_01_s - n_10_s
+  lnOR.s <- stats::rnorm(length(n), mean=lnOR_overall, sd=sqrt(vi))
+  # n_00_s <- n_00
+  # n_01_s <- n_01
+  # n_10_s <- n_00_s*(n-n_00_s-n_01_s)/(n_00_s + n_01_s*exp(lnOR.s))
+  # n_11_s <- n - n_00_s - n_01_s - n_10_s
 
   index<-sample(1:4,1,prob=c(0.25,0.25,0.25,0.25))
 

@@ -75,7 +75,6 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   model.r1<-try(metafor::rma(lnOR, vi, mods = mods, method="ML"))
   model.r2<-try(metafor::rma(lnOR, vi, mods = mods, method="REML"))
 
-
   #if (class(model.r2)!="try-error" ){
   if (sum(!class(model.r2)!="try-error")==0){
 
@@ -88,7 +87,7 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   for(i in 1:nrep){
     Sys.sleep(0.01)
     utils::setTxtProgressBar(pb, i)
-    find.c[,i] = simulate.OR(i, lnOR_overall, vi, n, n_00, n_01, mods)
+    find.c[,i] = simulate.OR(i, lnOR_overall, vi, n, n_00, n_01, n_10, n_11, mods)
   }
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
   if (err.catcher >0.05){
