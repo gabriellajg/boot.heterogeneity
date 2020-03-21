@@ -86,14 +86,14 @@ r <- sensation$r
 z <- 1/2*log((1+r)/(1-r))
 
 ## ---- eval=FALSE, results = 'hide'--------------------------------------------
-#  boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
+#  boot.run.cor <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  boot.run
+#  boot.run.cor
 #  #>                  stat    p_value    Heterogeneity
 #  #> Qtest       29.060970  0.00385868             sig
-#  #> boot.Qtest  29.060970  0.00240000             sig
-#  #> boot.REML    6.133111  0.00400000             sig
+#  #> boot.Qtest  29.060970  0.00240072             sig
+#  #> boot.REML    6.133111  0.00400882             sig
 
 ## -----------------------------------------------------------------------------
 library(HSAUR2)
@@ -111,12 +111,12 @@ lnOR <- log(n_11*n_00/n_01/n_10)
 lnOR
 
 ## ---- eval=FALSE, results = 'hide'--------------------------------------------
-#  boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
+#  boot.run.lnOR <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 
 ## ---- eval=FALSE--------------------------------------------------------------
-#  boot.run
+#  boot.run.lnOR
 #  #>                  stat    p_value    Heterogeneity
 #  #> Qtest       34.873957  0.09050857             n.s
-#  #> boot.Qtest  34.873957  0.08750000             n.s
-#  #> boot.REML    3.071329  0.03630000             sig
+#  #> boot.Qtest  34.873957  0.08826793             n.s
+#  #> boot.REML    3.071329  0.03706729             sig
 

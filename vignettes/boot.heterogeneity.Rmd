@@ -192,17 +192,17 @@ z <- 1/2*log((1+r)/(1-r))
 Run the heterogeneity test using `boot.fcor()`:
 
 ```{r, eval=FALSE, results = 'hide'}
-boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
+boot.run.cor <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 ```
 
 The test of between-study heterogeneity has the following results:
 
 ```{r, eval=FALSE}
-boot.run
+boot.run.cor
 #>                  stat    p_value    Heterogeneity
 #> Qtest       29.060970  0.00385868             sig
-#> boot.Qtest  29.060970  0.00240000             sig
-#> boot.REML    6.133111  0.00400000             sig
+#> boot.Qtest  29.060970  0.00240072             sig
+#> boot.REML    6.133111  0.00400882             sig
 ```
 
 * In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes are heterogeneous. 
@@ -243,21 +243,21 @@ lnOR
 Run the heterogeneity test using `boot.lnOR()`:
 
 ```{r, eval=FALSE, results = 'hide'}
-boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
+boot.run.lnOR <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 ```
 
 The test of between-study heterogeneity has the following results:
 
 ```{r, eval=FALSE}
-boot.run
+boot.run.lnOR
 #>                  stat    p_value    Heterogeneity
 #> Qtest       34.873957  0.09050857             n.s
-#> boot.Qtest  34.873957  0.08750000             n.s
-#> boot.REML    3.071329  0.03630000             sig
+#> boot.Qtest  34.873957  0.08826793             n.s
+#> boot.REML    3.071329  0.03706729             sig
 ```
 
 * In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected. 
 
 * In the second line, the Q-statistic is still 34.87 but the bootstrap-based p-value is 0.088. This means that the assumption of homogeneity marginally significant but not rejected at an alpha level of 0.05. 
 
-* In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.036. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.
+* In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.

@@ -30,12 +30,14 @@
 #' # A meta-analysis consists of 26 studies on nicotine replacement therapy for smoking cessation
 #' library(HSAUR2)
 #' data(smoking)
+#'
 #' # Y1: receive treatment; Y2: stop smoking
 #' n_00 <- smoking$tc - smoking$qc  # not receive treatement yet not stop smoking
 #' n_01 <- smoking$qc # not receive treatement but stop smoking
 #' n_10 <- smoking$tt - smoking$qt # receive treatement but not stop smoking
 #' n_11 <- smoking$qt # receive treatement and stop smoking
 #' lnOR <- log(n_11*n_00/n_01/n_10)
+#'
 #' \dontrun{
 #' boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 #' }

@@ -415,13 +415,13 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># Fisher's Transformation</span></a>
 <a class="sourceLine" id="cb16-6" data-line-number="6">z &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span><span class="op">+</span>r)<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>r))</a></code></pre></div>
 <p>Run the heterogeneity test using <code>boot.fcor()</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">boot.run &lt;-<span class="st"> </span><span class="kw">boot.fcor</span>(n, z, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">boot.run.cor &lt;-<span class="st"> </span><span class="kw">boot.fcor</span>(n, z, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <p>The test of between-study heterogeneity has the following results:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">boot.run</a>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">boot.run.cor</a>
 <a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#&gt;                  stat    p_value    Heterogeneity</span></a>
 <a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt; Qtest       29.060970  0.00385868             sig</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  29.060970  0.00240000             sig</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#&gt; boot.REML    6.133111  0.00400000             sig</span></a></code></pre></div>
+<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  29.060970  0.00240072             sig</span></a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#&gt; boot.REML    6.133111  0.00400882             sig</span></a></code></pre></div>
 <ul>
 <li><p>In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes are heterogeneous.</p></li>
 <li><p>In the second line, the Q-statistic is still 29.06 but the bootstrap-based p-value is 0.0024. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.</p></li>
@@ -450,17 +450,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt; [19]  1.3411739  0.2963470  0.6116721  0.3786539  0.5389965  0.7532417</span></a>
 <a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">#&gt; [25]  0.5653138  0.3786539</span></a></code></pre></div>
 <p>Run the heterogeneity test using <code>boot.lnOR()</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">boot.run &lt;-<span class="st"> </span><span class="kw">boot.lnOR</span>(n_<span class="dv">00</span>, n_<span class="dv">01</span>, n_<span class="dv">10</span>, n_<span class="dv">11</span>, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">boot.run.lnOR &lt;-<span class="st"> </span><span class="kw">boot.lnOR</span>(n_<span class="dv">00</span>, n_<span class="dv">01</span>, n_<span class="dv">10</span>, n_<span class="dv">11</span>, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
 <p>The test of between-study heterogeneity has the following results:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">boot.run</a>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">boot.run.lnOR</a>
 <a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co">#&gt;                  stat    p_value    Heterogeneity</span></a>
 <a class="sourceLine" id="cb23-3" data-line-number="3"><span class="co">#&gt; Qtest       34.873957  0.09050857             n.s</span></a>
-<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  34.873957  0.08750000             n.s</span></a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="co">#&gt; boot.REML    3.071329  0.03630000             sig</span></a></code></pre></div>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  34.873957  0.08826793             n.s</span></a>
+<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="co">#&gt; boot.REML    3.071329  0.03706729             sig</span></a></code></pre></div>
 <ul>
 <li><p>In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected.</p></li>
 <li><p>In the second line, the Q-statistic is still 34.87 but the bootstrap-based p-value is 0.088. This means that the assumption of homogeneity marginally significant but not rejected at an alpha level of 0.05.</p></li>
-<li><p>In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.036. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.</p></li>
+<li><p>In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.</p></li>
 </ul>
 </div>
 </div>
