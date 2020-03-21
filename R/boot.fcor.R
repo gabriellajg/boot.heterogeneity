@@ -84,9 +84,9 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
 
   if (sum(!class(model.r1)!="try-error" , !class(model.f1)!="try-error")==0){
     lllr1<-(metafor::fitstats(model.r1)-metafor::fitstats(model.f1))[1]*2
-    p_lr1<-sum(ML.sim>=lllr1)/nrep
-    p_lr1.a <-sum(ML.sim>=2.71)/nrep
-    p_Q <- sum(chisq.sim>=model.f1$QE)/nrep  # ???
+    p_lr1<-sum(ML.sim>=lllr1)/length(ML.sim)
+    p_lr1.a <-sum(ML.sim>=2.71)/length(ML.sim)
+    p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)  # ???
     res_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
     res_bootQ<-ifelse(model.f1$QE>=chisq.c, 'sig', 'n.s')
   } else {
@@ -95,8 +95,8 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
 
   if (sum(!class(model.r2)!="try-error" , !class(model.f2)!="try-error")==0){
     lllr2<-(metafor::fitstats(model.r2)-metafor::fitstats(model.f2))[1]*2
-    p_lr2<-sum(REML.sim>=lllr2)/nrep
-    p_lr2.a <-sum(REML.sim>=2.71)/nrep
+    p_lr2<-sum(REML.sim>=lllr2)/length(REML.sim)
+    p_lr2.a <-sum(REML.sim>=2.71)/length(REML.sim)
     res_lr2<-ifelse(lllr2>REML.c, 'sig', 'n.s')
   } else {
     lllr2<-NA; p_lr2<-NA; res_lr2<-NA; p_lr2.a<-NA
