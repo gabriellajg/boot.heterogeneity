@@ -42,3 +42,7 @@ the previous version with `force` installation:
 ``` r
 devtools::install_github("gabriellajg/boot.heterogeneity", force = TRUE)
 ```
+
+Updates to this package will always be pushed to Github first. If you
+encounter any errors, please re-install the package from github using
+`force` installation and try again.
