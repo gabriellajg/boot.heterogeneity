@@ -64,6 +64,8 @@ lnOR <- log(n_11*n_00/n_01/n_10)
 \dontrun{
 boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 }
+# Note: this boot.lnOR function is supposed to replace
+# its earlier version in \link[mc.heterogeneity]{mc.lnOR}.
 }
 \references{
 Anscombe, F. J. (1956). On estimating binomial response relations. Biometrika, 43(3/4), 461–464.

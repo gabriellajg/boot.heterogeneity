@@ -41,6 +41,8 @@
 #' \dontrun{
 #' boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 #' }
+#' # Note: this boot.lnOR function is supposed to replace
+#' # its earlier version in \link[mc.heterogeneity]{mc.lnOR}.
 #' @export
 
 boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE) {
@@ -84,6 +86,7 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   lnOR_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
+  options(warn=-1)
   find.c <- matrix(NA, 3, nrep)
   pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
   for(i in 1:nrep){
@@ -103,14 +106,11 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   REML.c<-stats::quantile(REML.sim, 0.95)
   chisq.c<-stats::quantile(chisq.sim, 0.95)
 
-  REML.c<-stats::quantile(REML.sim, 1-0.03630000)
-  chisq.c<-stats::quantile(chisq.sim, 1-0.03630000)
-
   if (sum(!class(model.r1)!="try-error" , !class(model.f1)!="try-error")==0){
     lllr1<-(metafor::fitstats(model.r1)-metafor::fitstats(model.f1))[1]*2
     p_lr1<-sum(ML.sim>=lllr1)/length(ML.sim)
     p_lr1.a <-sum(ML.sim>=2.71)/length(ML.sim)
-    p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)  # ???
+    p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)
     res_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
     res_bootQ<-ifelse(model.f1$QE>=chisq.c, 'sig', 'n.s')
   } else {
@@ -128,7 +128,7 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
 
   Q <- model.f1$QE
   Qp <- model.r2$QEp
-  Qres<-ifelse(Qp< p_cut, 'sig', 'n.s') ### vary the size
+  Qres<-ifelse(Qp<= p_cut, 'sig', 'n.s') ### vary the size
   } else {
     Q<-NA
     Qp<-NA

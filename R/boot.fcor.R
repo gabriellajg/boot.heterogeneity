@@ -21,7 +21,9 @@
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 #'
 #' @examples
-#' # A meta-analysis of 13 studies studying the correlation between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
+#' # A meta-analysis of 13 studies studying the correlation
+#' # between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
+#'
 #' sensation <- boot.heterogeneity:::sensation
 #'
 #' # n is a list of samples sizes
@@ -36,6 +38,8 @@
 #' \dontrun{
 #' #' boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 #' }
+#' # Note: this boot.fcor function is supposed to replace its
+#' # earlier version in \link[mc.heterogeneity]{mc.fcor}.
 #' @export
 
 boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE) {
@@ -66,6 +70,7 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   z_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
+  options(warn=-1)
   find.c <- matrix(NA, 3, nrep)
   pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
   for(i in 1:nrep){
@@ -89,7 +94,7 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
     lllr1<-(metafor::fitstats(model.r1)-metafor::fitstats(model.f1))[1]*2
     p_lr1<-sum(ML.sim>=lllr1)/length(ML.sim)
     p_lr1.a <-sum(ML.sim>=2.71)/length(ML.sim)
-    p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)  # ???
+    p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)
     res_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
     res_bootQ<-ifelse(model.f1$QE>=chisq.c, 'sig', 'n.s')
   } else {
@@ -107,7 +112,7 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
 
   Q <- model.f1$QE
   Qp <- model.r2$QEp
-  Qres<-ifelse(Qp< p_cut, 'sig', 'n.s') ### vary the size
+  Qres<-ifelse(Qp<= p_cut, 'sig', 'n.s') ### vary the size
   } else {
     Q<-NA
     Qp<-NA

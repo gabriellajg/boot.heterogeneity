@@ -1,5 +1,6 @@
 # MC simulation function for Standardized Mean Differences (d)
 simulate.d<-function(nrep, d_overall, vi, n1, n2, mods){
+  options(warn=-1)
   set.seed(nrep)
   d.s<-stats::rnorm(length(n1),mean=d_overall, sd=sqrt(vi))
   vi.s<-(n1+n2)/n1/n2+d.s^2/(2*(n1+n2))
@@ -26,6 +27,7 @@ simulate.d<-function(nrep, d_overall, vi, n1, n2, mods){
 # MC simulation function for Fisher's Transformed z Scores (r, z)
 
 simulate.z<-function(nrep, z_overall, vi, n, mods){
+  options(warn=-1)
   set.seed(nrep)
   z.s<-stats::rnorm(length(n), mean = z_overall, sd = sqrt(vi))
   vi.s<- vi
@@ -53,6 +55,7 @@ simulate.z<-function(nrep, z_overall, vi, n, mods){
 #n_11                    n_01                 n_10      n_00
 
 simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00_s, n_01_s, n_10_s, n_11_s, mods){
+  options(warn=-1)
   set.seed(nrep)
   lnOR.s <- stats::rnorm(length(n), mean=lnOR_overall, sd=sqrt(vi))
   # n_00_s <- n_00

@@ -8,6 +8,8 @@ Description: Implements a Bootstrap-Based Heterogeneity Test for standardized me
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true
+URL: https://github.com/gabriellajg/boot.heterogeneity/
+BugReports: https://github.com/gabriellajg/boot.heterogeneity/issues
 RoxygenNote: 7.1.0
 Depends: R (>= 3.1.0)
 Imports: stats, metafor, utils
@@ -16,5 +18,6 @@ Suggests:
     HSAUR2,
     roxygen2,
     knitr,
-    rmarkdown
+    rmarkdown,
+    mc.heterogeneity
 VignetteBuilder: knitr

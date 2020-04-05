@@ -46,7 +46,9 @@ This function returns the test statistics as well as their p-value and significa
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero whereas "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }
 \examples{
-# Demo 1: A meta-analysis of 18 studies in which the effect of open versus traditional education on students' self-concept was studied (Hedges et al., 1981).
+# Demo 1: A meta-analysis of 18 studies in which the effect of open versus
+# traditional education on students' self-concept was studied (Hedges et al., 1981).
+
 selfconcept <- boot.heterogeneity:::selfconcept
 
 # n1 and n2 are lists of samples sizes in two groups
@@ -70,6 +72,9 @@ hypo_moder <- boot.heterogeneity:::hypo_moder
 boot.run3 <- boot.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
 mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 }
+
+# Note: this boot.d function is supposed to replace its
+# earlier version in \link[mc.heterogeneity]{mc.d}.
 }
 \references{
 Hedges, L. V. (1981). Distribution theory for glass’s estimator of effect size and related estimators. Journal of Educational and Behavioral Statistics, 6(2), 107–128.
