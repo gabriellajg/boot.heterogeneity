@@ -243,7 +243,7 @@ lnOR
 Run the heterogeneity test using `boot.lnOR()`:
 
 ```{r, eval=FALSE, results = 'hide'}
-boot.run.lnOR <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
+boot.run.lnOR <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05) 
 ```
 
 The test of between-study heterogeneity has the following results:
