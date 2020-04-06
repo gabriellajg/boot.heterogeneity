@@ -160,7 +160,7 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
   rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.REML')
 
   if(boot.include){
-    out <- list(results = out, ML.crit = ML.c, REML.crit = REML.c, chisq.crit = chisq.c)
+    out <- list(results = out, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)
   }
 
   return(out)

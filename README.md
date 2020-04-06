@@ -5,6 +5,8 @@
 
 <!-- badges: start -->
 
+[![Travis build
+status](https://travis-ci.org/gabriellajg/boot.heterogeneity.svg?branch=master)](https://travis-ci.org/gabriellajg/boot.heterogeneity)
 <!-- badges: end -->
 
 The package boot.heterogeneity implements a Bootstrap-Based
@@ -46,3 +48,6 @@ devtools::install_github("gabriellajg/boot.heterogeneity", force = TRUE)
 Updates to this package will always be pushed to Github first. If you
 encounter any errors, please re-install the package from github using
 `force` installation and try again.
+
+[![Build
+Status](https://travis-ci.org/gabriellajg/boot.heterogeneity.svg?branch=master)](https://travis-ci.org/gabriellajg/boot.heterogeneity)

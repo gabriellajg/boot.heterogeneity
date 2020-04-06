@@ -154,7 +154,7 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.REML')
 
   if(boot.include){
-    out <- list(results = out, ML.crit = ML.c, REML.crit = REML.c, chisq.crit = chisq.c)
+    out <- list(results = out, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)
   }
 
   return(out)
