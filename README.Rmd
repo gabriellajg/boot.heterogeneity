@@ -24,7 +24,7 @@ Depending on the presence of moderators, this Bootstrap-Based Test can be implem
 
 ## Installation
 
-You can install the released version of boot.heterogeneity from [CRAN](https://cran.r-project.org/web/packages/mc.heterogeneity/index.html) with:
+You can install the released version of boot.heterogeneity from [CRAN](https://CRAN.R-project.org/package=mc.heterogeneity) with:
 
 ``` r
 install.packages("boot.heterogeneity")

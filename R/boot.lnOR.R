@@ -79,21 +79,83 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   model.r1<-try(metafor::rma(lnOR, vi, mods = mods, method="ML"))
   model.r2<-try(metafor::rma(lnOR, vi, mods = mods, method="REML"))
 
-  #if (class(model.r2)!="try-error" ){
   if (sum(!class(model.r2)!="try-error")==0){
 
   bs <- model.r2$beta[,1]
   lnOR_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
-  options(warn=-1)
-  find.c <- matrix(NA, 3, nrep)
-  pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
-  for(i in 1:nrep){
-    Sys.sleep(0.01)
-    utils::setTxtProgressBar(pb, i)
-    find.c[,i] = simulate.OR(i, lnOR_overall, vi, n, n_00, n_01, n_10, n_11, mods)
+  #simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00_s, n_01_s, n_10_s, n_11_s, mods){
+  simulate.OR<-function(nrep){
+    options(warn=-1)
+    set.seed(nrep)
+    lnOR.s <- stats::rnorm(length(n), mean=lnOR_overall, sd=sqrt(vi))
+    # n_00_s <- n_00
+    # n_01_s <- n_01
+    # n_10_s <- n_00_s*(n-n_00_s-n_01_s)/(n_00_s + n_01_s*exp(lnOR.s))
+    # n_11_s <- n - n_00_s - n_01_s - n_10_s
+
+    index<-sample(1:4,1,prob=c(0.25,0.25,0.25,0.25))
+
+    if (index==1){
+      n_00_s<-exp(lnOR.s)*n_10_s*n_01_s/n_11_s
+    }
+
+    if (index==2){
+      n_01_s<-n_11_s*n_00_s/exp(lnOR.s)/n_10_s
+    }
+
+    if (index==3){
+      n_10_s<-n_11_s*n_00_s/exp(lnOR.s)/n_01_s
+    }
+
+    if (index==4){
+      n_11_s<-exp(lnOR.s)*n_10_s*n_01_s/n_00_s
+    }
+
+    #########################################################################
+    vi.s <- 1/n_00_s+1/n_01_s+1/n_10_s+1/n_11_s
+
+    # zero count correction
+    df <- cbind(n_00_s, n_01_s, n_10_s, n_11_s)
+    if(any(df == 0)){
+      df <- df + 0.5*(df==0)
+      n_00_s <- df$n_00_s
+      n_01_s <- df$n_01_s
+      n_10_s <- df$n_10_s
+      n_11_s <- df$n_11_s
+    }
+    #########################################################################
+    model.f1.s<-try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
+    model.f2.s<-try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=0,method="REML"), silent = TRUE)
+    model.r1.s<-try(metafor::rma(lnOR.s, vi.s, mods = mods, method="ML"), silent = TRUE)
+    model.r2.s<-try(metafor::rma(lnOR.s, vi.s, mods = mods, method="REML"), silent = TRUE)
+
+    #if (class(model.r1.s)!="try-error" & class(model.f1.s)!="try-error"){
+    if (sum(!class(model.r1.s)!="try-error" , !class(model.f1.s)!="try-error")==0){
+      lllr1.s<-(metafor::fitstats(model.r1.s)-metafor::fitstats( model.f1.s))[1]*2
+      chisq<-model.f1.s$QE} else {
+        lllr1.s<-NA; chisq<-NA}
+    #if (class(model.r2.s)!="try-error" & class(model.f2.s)!="try-error"){
+    if (sum(!class(model.r2.s)!="try-error" , !class(model.f2.s)!="try-error")==0){
+      lllr2.s<-(metafor::fitstats(model.r2.s)-metafor::fitstats( model.f2.s))[1]*2} else {
+        lllr2.s<-NA}
+
+    Sys.sleep(runif(1))
+    return(c(lllr1.s, lllr2.s, chisq))
   }
+
+  options(warn=-1)
+  # find.c <- matrix(NA, 3, nrep)
+  # pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
+  # for(i in 1:nrep){
+  #   Sys.sleep(0.01)
+  #   utils::setTxtProgressBar(pb, i)
+  #   find.c[,i] = simulate.OR(i, lnOR_overall, vi, n, n_00, n_01, n_10, n_11, mods)
+  # }
+  cat("Bootstrapping... \n")
+  n_00_s=n_00; n_01_s=n_01; n_10_s=n_10; n_11_s=n_11;
+  find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.OR, mc.cores = parallel::detectCores()-1))
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
   if (err.catcher >0.05){
     warning("Noncovergence rate in simulations is larger than 5%!")
@@ -154,7 +216,7 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.REML')
 
   if(boot.include){
-    out <- list(results = out, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)
+    out <- list(results = out, find.c = find.c, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)
   }
 
   return(out)

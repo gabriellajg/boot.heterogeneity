@@ -84,22 +84,47 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
   model.r1<-try(metafor::rma(est, vi, mods = mods, method="ML"))
   model.r2<-try(metafor::rma(est, vi, mods = mods, method="REML"))
 
-
-  #if (class(model.r2)!="try-error" ){
   if (sum(!class(model.r2)!="try-error")==0 ){
 
   bs <- model.r2$beta[,1]
   d_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
+  # MC simulation function for Standardized Mean Differences (d)
+  simulate.d<-function(nrep){
+    options(warn=-1)
+    set.seed(nrep)
+    d.s<-stats::rnorm(length(n1),mean=d_overall, sd=sqrt(vi))
+    vi.s<-(n1+n2)/n1/n2+d.s^2/(2*(n1+n2))
+    model.f1.s<-try(metafor::rma(d.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
+    model.f2.s<-try(metafor::rma(d.s, vi.s, mods = mods, tau2=0,method="REML"), silent = TRUE)
+    model.r1.s<-try(metafor::rma(d.s, vi.s, mods = mods, method="ML"), silent = TRUE)
+    model.r2.s<-try(metafor::rma(d.s, vi.s, mods = mods, method="REML"), silent = TRUE)
+
+    #if (class(model.r1.s)!="try-error" & class(model.f1.s)!="try-error"){
+    if (sum(!class(model.r1.s)!="try-error" , !class(model.f1.s)!="try-error")==0){
+      lllr1.s<-(metafor::fitstats(model.r1.s)-metafor::fitstats( model.f1.s))[1]*2
+      chisq<-model.f1.s$QE} else {
+        lllr1.s<-NA; chisq<-NA}
+    #if (class(model.r2.s)!="try-error" & class(model.f2.s)!="try-error"){
+    if (sum(!class(model.r2.s)!="try-error" , !class(model.f2.s)!="try-error")==0){
+      lllr2.s<-(metafor::fitstats(model.r2.s)-metafor::fitstats( model.f2.s))[1]*2} else {
+        lllr2.s<-NA}
+
+    Sys.sleep(runif(1))
+    return(c(lllr1.s, lllr2.s, chisq))
+  }
+
   options(warn=-1)
-  find.c <- matrix(NA, 3, nrep)
-  pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
-  for(i in 1:nrep){
-    Sys.sleep(0.01)
-    utils::setTxtProgressBar(pb, i)
-    find.c[,i] = simulate.d(i, d_overall, vi, n1, n2, mods)
-    }
+  # find.c <- matrix(NA, 3, nrep)
+  # pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
+  # for(i in 1:nrep){
+  #   Sys.sleep(0.01)
+  #   utils::setTxtProgressBar(pb, i)
+  #   find.c[,i] = simulate.d(i, d_overall, vi, n1, n2, mods)
+  #   }
+  cat("Bootstrapping... \n")
+  find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.d, mc.cores = parallel::detectCores()-1))
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
   if (err.catcher >0.05){
     warning("Noncovergence rate in simulations is larger than 5%!")
@@ -160,7 +185,7 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
   rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.REML')
 
   if(boot.include){
-    out <- list(results = out, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)
+    out <- list(results = out, find.c = find.c, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)
   }
 
   return(out)
