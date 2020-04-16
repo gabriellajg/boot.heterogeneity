@@ -18,8 +18,11 @@
 #' @param nrep number of replications used in bootstrap simulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
+#' @param parallel if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.
+#'
 #' @importFrom metafor rma
 #' @importFrom metafor fitstats
+#' @importFrom pbmcapply pbmclapply
 
 #' @references Anscombe, F. J. (1956). On estimating binomial response relations. Biometrika, 43(3/4), 461–464.
 #' @references Haldane, J. (1940). The mean and variance of| chi 2, when used as a test of homogeneity, when expectations are small. Biometrika, 31(3/4), 346–355.
@@ -45,7 +48,7 @@
 #' # its earlier version in \link[mc.heterogeneity]{mc.lnOR}.
 #' @export
 
-boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE) {
+boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -85,7 +88,12 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
   lnOR_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
-  #simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00_s, n_01_s, n_10_s, n_11_s, mods){
+  options(warn=-1)
+  cat("Bootstrapping... \n")
+  n_00_s=n_00; n_01_s=n_01; n_10_s=n_10; n_11_s=n_11;
+  #globalVariables(c("lnOR_overall", "vi", "n", "n_00", "n_01", "n_10", "n_11", "mods"))
+
+  # MC simulation function for log odds ratio
   simulate.OR<-function(nrep){
     options(warn=-1)
     set.seed(nrep)
@@ -145,17 +153,19 @@ boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nre
     return(c(lllr1.s, lllr2.s, chisq))
   }
 
-  options(warn=-1)
-  # find.c <- matrix(NA, 3, nrep)
-  # pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
-  # for(i in 1:nrep){
-  #   Sys.sleep(0.01)
-  #   utils::setTxtProgressBar(pb, i)
-  #   find.c[,i] = simulate.OR(i, lnOR_overall, vi, n, n_00, n_01, n_10, n_11, mods)
-  # }
-  cat("Bootstrapping... \n")
-  n_00_s=n_00; n_01_s=n_01; n_10_s=n_10; n_11_s=n_11;
-  find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.OR, mc.cores = parallel::detectCores()-1))
+
+  if(parallel){
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.OR, mc.cores = parallel::detectCores()-1))
+  } else {
+    find.c <- matrix(NA, 3, nrep)
+    pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
+    for(i in 1:nrep){
+      Sys.sleep(0.01)
+      utils::setTxtProgressBar(pb, i)
+      find.c[,i] = simulate.OR(i)
+      # simulate.OR(i, lnOR_overall, vi, n, n_00, n_01, n_10, n_11, mods)
+    }
+  }
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
   if (err.catcher >0.05){
     warning("Noncovergence rate in simulations is larger than 5%!")

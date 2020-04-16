@@ -13,7 +13,8 @@ boot.d(
   mods = NULL,
   nrep = 10^4,
   p_cut = 0.05,
-  boot.include = FALSE
+  boot.include = FALSE,
+  parallel = TRUE
 )
 }
 \arguments{
@@ -34,6 +35,8 @@ boot.d(
 \item{p_cut}{cutoff for p-values, which is the alpha level. Default to 0.05.}
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
+
+\item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
 }
 \description{
 \code{boot.d} returns the bootstrap-based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).

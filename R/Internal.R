@@ -20,14 +20,13 @@ simulate.d<-function(nrep){
     lllr2.s<-(metafor::fitstats(model.r2.s)-metafor::fitstats( model.f2.s))[1]*2} else {
       lllr2.s<-NA}
 
-  Sys.sleep(runif(1))
+  #Sys.sleep(runif(1))
   return(c(lllr1.s, lllr2.s, chisq))
 }
 
 #  boot.d.random: find.c<- mclapply(1:10^4, simulate.d, boot.cores=ncores)
 
 # MC simulation function for Fisher's Transformed z Scores (r, z)
-
 #simulate.z<-function(nrep, z_overall, vi, n, mods){
 simulate.z<-function(nrep){
   options(warn=-1)

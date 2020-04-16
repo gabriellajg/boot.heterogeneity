@@ -17,9 +17,11 @@
 #' @param nrep number of replications used in bootstrap imulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
+#' @param parallel if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.
 
 #' @importFrom metafor rma
 #' @importFrom metafor fitstats
+#' @importFrom pbmcapply pbmclapply
 
 #' @references Hedges, L. V. (1981). Distribution theory for glass’s estimator of effect size and related estimators. Journal of Educational and Behavioral Statistics, 6(2), 107–128.
 #' @references Hedges, L. V., Giaconia, R. M., & Gage, N. L. (1981). Meta-analysis of the effect of open and traditional instruction. Stanford, CA: Stanford University, Program on Teaching Effectiveness.
@@ -57,7 +59,7 @@
 #' # earlier version in \link[mc.heterogeneity]{mc.d}.
 #' @export
 
-boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE) {
+boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -90,6 +92,10 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
   d_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
+  options(warn=-1)
+  cat("Bootstrapping... \n")
+  #globalVariables(c("d_overall", "vi", "n1", "n2", "mods"))
+
   # MC simulation function for Standardized Mean Differences (d)
   simulate.d<-function(nrep){
     options(warn=-1)
@@ -111,20 +117,22 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
       lllr2.s<-(metafor::fitstats(model.r2.s)-metafor::fitstats( model.f2.s))[1]*2} else {
         lllr2.s<-NA}
 
-    Sys.sleep(runif(1))
+    #Sys.sleep(runif(1))
     return(c(lllr1.s, lllr2.s, chisq))
   }
 
-  options(warn=-1)
-  # find.c <- matrix(NA, 3, nrep)
-  # pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
-  # for(i in 1:nrep){
-  #   Sys.sleep(0.01)
-  #   utils::setTxtProgressBar(pb, i)
-  #   find.c[,i] = simulate.d(i, d_overall, vi, n1, n2, mods)
-  #   }
-  cat("Bootstrapping... \n")
-  find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.d, mc.cores = parallel::detectCores()-1))
+  if(parallel){
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.d, mc.cores = parallel::detectCores()-1))
+  } else {
+    find.c <- matrix(NA, 3, nrep)
+    pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
+    for(i in 1:nrep){
+      Sys.sleep(0.01)
+      utils::setTxtProgressBar(pb, i)
+      find.c[,i] = simulate.d(i)
+      # simulate.d(i, d_overall, vi, n1, n2, mods)
+      }
+  }
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
   if (err.catcher >0.05){
     warning("Noncovergence rate in simulations is larger than 5%!")
@@ -173,13 +181,6 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
     p_lr2<-NA
     res_lr2<-NA
   }
-
-  #out <- data.frame(stat = c(Q, lllr1, lllr2), p_value = c(Qp, p_lr1, p_lr2), Heterogeneity = c(Qres, res_lr1, res_lr2))
-  #(Q, Qp, Qres, lllr1, p_lr1, res_lr1, lllr2, p_lr2, res_lr2)
-  #rownames(out) <- c('Qtest', 'boot.ML', 'boot.REML')
-
-  #out <- data.frame(stat = c(Q, Q, lllr1, lllr2), p_value = c(Qp, p_Q, p_lr1, p_lr2), Heterogeneity = c(Qres, res_bootQ, res_lr1, res_lr2))
-  #rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.ML', 'boot.REML')
 
   out <- data.frame(stat = c(Q, Q, lllr2), p_value = c(Qp, p_Q, p_lr2), Heterogeneity = c(Qres, res_bootQ, res_lr2))
   rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.REML')

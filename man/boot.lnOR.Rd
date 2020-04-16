@@ -16,7 +16,8 @@ boot.lnOR(
   mods = NULL,
   nrep = 10^4,
   p_cut = 0.05,
-  boot.include = FALSE
+  boot.include = FALSE,
+  parallel = TRUE
 )
 }
 \arguments{
@@ -37,6 +38,8 @@ boot.lnOR(
 \item{p_cut}{cutoff for p-values, which is the alpha level. Default to 0.05.}
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
+
+\item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
 \item{lnOR}{a vector of natural-logarithm-transformed odds ratio in the included studies, which is calculated as ln(n11*n00/n01/n10)}
 }

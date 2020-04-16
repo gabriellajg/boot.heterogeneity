@@ -13,9 +13,11 @@
 #' @param nrep number of replications used in bootstrap simulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
+#' @param parallel if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.
 #'
 #' @importFrom metafor rma
 #' @importFrom metafor fitstats
+#' @importFrom pbmcapply pbmclapply
 #'
 #' @references Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation seeking. New York, NY: Cambridge University Press.
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
@@ -42,7 +44,7 @@
 #' # earlier version in \link[mc.heterogeneity]{mc.fcor}.
 #' @export
 
-boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE) {
+boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -69,7 +71,11 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   z_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
-  #simulate.z<-function(nrep, z_overall, vi, n, mods){
+  options(warn=-1)
+  cat("Bootstrapping... \n")
+  #globalVariables(c("z_overall", "vi", "n", "mods"))
+
+  # MC simulation function for Fisher's Transformed z Scores (r, z)
   simulate.z<-function(nrep){
     options(warn=-1)
     set.seed(nrep)
@@ -94,16 +100,18 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
     return(c(lllr1.s,lllr2.s, chisq))
   }
 
-  options(warn=-1)
-  # find.c <- matrix(NA, 3, nrep)
-  # pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
-  # for(i in 1:nrep){
-  #   Sys.sleep(0.01)
-  #   utils::setTxtProgressBar(pb, i)
-  #   find.c[,i] = simulate.z(i, z_overall, vi, n, mods)
-  #   }
-  cat("Bootstrapping... \n")
-  find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, mc.cores = parallel::detectCores()-1))
+  if(parallel){
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, mc.cores = parallel::detectCores()-1))
+  } else {
+    find.c <- matrix(NA, 3, nrep)
+    pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
+    for(i in 1:nrep){
+      Sys.sleep(0.01)
+      utils::setTxtProgressBar(pb, i)
+      find.c[,i] = simulate.z(i)
+      # simulate.z(i, z_overall, vi, n, mods)
+    }
+  }
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
   if (err.catcher >0.05){
     warning("Noncovergence rate in simulations is larger than 5%!")
