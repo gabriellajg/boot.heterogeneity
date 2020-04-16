@@ -1,6 +1,5 @@
 # MC simulation function for Standardized Mean Differences (d)
-#simulate.d<-function(nrep, d_overall, vi, n1, n2, mods){
-simulate.d<-function(nrep){
+simulate.d<-function(nrep, d_overall, vi, n1, n2, mods){
   options(warn=-1)
   set.seed(nrep)
   d.s<-stats::rnorm(length(n1),mean=d_overall, sd=sqrt(vi))
@@ -20,15 +19,14 @@ simulate.d<-function(nrep){
     lllr2.s<-(metafor::fitstats(model.r2.s)-metafor::fitstats( model.f2.s))[1]*2} else {
       lllr2.s<-NA}
 
-  #Sys.sleep(runif(1))
+  Sys.sleep(runif(1))
   return(c(lllr1.s, lllr2.s, chisq))
 }
 
 #  boot.d.random: find.c<- mclapply(1:10^4, simulate.d, boot.cores=ncores)
 
 # MC simulation function for Fisher's Transformed z Scores (r, z)
-#simulate.z<-function(nrep, z_overall, vi, n, mods){
-simulate.z<-function(nrep){
+simulate.z<-function(nrep, z_overall, vi, n, mods){
   options(warn=-1)
   set.seed(nrep)
   z.s<-stats::rnorm(length(n), mean = z_overall, sd = sqrt(vi))
@@ -57,8 +55,7 @@ simulate.z<-function(nrep){
 #n4=dat$qt;   nt=dat$tt; n2=dat$qc; nc=dat$tc;n3=nt-n4; n1=nc-n2
 #n_11                    n_01                 n_10      n_00
 
-#simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00_s, n_01_s, n_10_s, n_11_s, mods){
-simulate.OR<-function(nrep){
+simulate.OR<-function(nrep, lnOR_overall, vi, n, n_00_s, n_01_s, n_10_s, n_11_s, mods){
   options(warn=-1)
   set.seed(nrep)
   lnOR.s <- stats::rnorm(length(n), mean=lnOR_overall, sd=sqrt(vi))

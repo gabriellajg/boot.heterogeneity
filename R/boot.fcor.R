@@ -18,6 +18,7 @@
 #' @importFrom metafor rma
 #' @importFrom metafor fitstats
 #' @importFrom pbmcapply pbmclapply
+#' @importFrom stats runif
 #'
 #' @references Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation seeking. New York, NY: Cambridge University Press.
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
@@ -73,43 +74,16 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
 
   options(warn=-1)
   cat("Bootstrapping... \n")
-  #globalVariables(c("z_overall", "vi", "n", "mods"))
-
-  # MC simulation function for Fisher's Transformed z Scores (r, z)
-  simulate.z<-function(nrep){
-    options(warn=-1)
-    set.seed(nrep)
-    z.s<-stats::rnorm(length(n), mean = z_overall, sd = sqrt(vi))
-    vi.s<- vi
-    model.f1.s<-try(metafor::rma(z.s, vi.s, mods = mods, tau2=0, method="ML"), silent = TRUE)
-    model.f2.s<-try(metafor::rma(z.s, vi.s, mods = mods, tau2=0,method="REML"), silent = TRUE)
-    model.r1.s<-try(metafor::rma(z.s, vi.s, mods = mods, method="ML"), silent = TRUE)
-    model.r2.s<-try(metafor::rma(z.s, vi.s, mods = mods, method="REML"), silent = TRUE)
-
-    #if (class(model.r1.s)!="try-error" & class(model.f1.s)!="try-error"){
-    if (sum(!class(model.r1.s)!="try-error" , !class(model.f1.s)!="try-error")==0){
-      lllr1.s<-(metafor::fitstats(model.r1.s)-metafor::fitstats( model.f1.s))[1]*2
-      chisq<-model.f1.s$QE} else {
-        lllr1.s<-NA; chisq<-NA}
-    #if (class(model.r2.s)!="try-error" & class(model.f2.s)!="try-error"){
-    if (sum(!class(model.r2.s)!="try-error" , !class(model.f2.s)!="try-error")==0){
-      lllr2.s<-(metafor::fitstats(model.r2.s)-metafor::fitstats( model.f2.s))[1]*2} else {
-        lllr2.s<-NA}
-
-    #Sys.sleep(runif(1))
-    return(c(lllr1.s,lllr2.s, chisq))
-  }
 
   if(parallel){
-    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, mc.cores = parallel::detectCores()-1))
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, z_overall=z_overall, vi=vi, n=n, mods=mods, mc.cores = parallel::detectCores()-1))
   } else {
     find.c <- matrix(NA, 3, nrep)
     pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)
     for(i in 1:nrep){
       Sys.sleep(0.01)
       utils::setTxtProgressBar(pb, i)
-      find.c[,i] = simulate.z(i)
-      # simulate.z(i, z_overall, vi, n, mods)
+      find.c[,i] = simulate.z(i, z_overall, vi, n, mods)
     }
   }
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
