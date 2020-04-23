@@ -33,7 +33,7 @@ Inclusion of moderators is an option for researchers who are interested in measu
 
 ## 0. Installation of the package
 
-Install the released version of boot.heterogeneity from [CRAN](https://cran.r-project.org/web/packages/mc.heterogeneity/index.html) with:
+Install the released version of boot.heterogeneity from [CRAN](https://cran.r-project.org/package=mc.heterogeneity) with:
 
 ```{r setup, eval = FALSE}
 install.packages("boot.heterogeneity")

@@ -18,7 +18,10 @@
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
 #' @param parallel if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.
-
+#' @param verbose if true, show the progress of boostrapping.
+#'
+#' @return A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
+#'
 #' @importFrom metafor rma
 #' @importFrom metafor fitstats
 #' @importFrom pbmcapply pbmclapply
@@ -60,7 +63,7 @@
 #' # earlier version in \link[mc.heterogeneity]{mc.d}.
 #' @export
 
-boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE) {
+boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE, verbose = FALSE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -93,8 +96,7 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
   d_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
   #get predicted effect size for each study #for w/ and w/o moderators
 
-  options(warn=-1)
-  cat("Bootstrapping... \n")
+  if(verbose){cat("Bootstrapping... \n")}
 
   if(parallel){
     find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.d, d_overall=d_overall, vi=vi, n1=n1, n2=n2, mods=mods, mc.cores = parallel::detectCores()-1))

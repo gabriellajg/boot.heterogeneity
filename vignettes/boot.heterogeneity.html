@@ -315,7 +315,7 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 </div>
 <div id="installation-of-the-package" class="section level2">
 <h2>0. Installation of the package</h2>
-<p>Install the released version of boot.heterogeneity from <a href="https://cran.r-project.org/web/packages/mc.heterogeneity/index.html">CRAN</a> with:</p>
+<p>Install the released version of boot.heterogeneity from <a href="https://cran.r-project.org/package=mc.heterogeneity">CRAN</a> with:</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;boot.heterogeneity&quot;</span>)</a></code></pre></div>
 <p>Or install the development version from <a href="https://github.com/gabriellajg/boot.heterogeneity">GitHub</a> with:</p>
 <div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#install.packages(&quot;devtools&quot;)</span></a>
@@ -487,17 +487,17 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <a class="sourceLine" id="cb24-23" data-line-number="23"><span class="co">#&gt;  [7] pkgbuild_1.0.6      pkgload_1.0.2       evaluate_0.14      </span></a>
 <a class="sourceLine" id="cb24-24" data-line-number="24"><span class="co">#&gt; [10] nlme_3.1-147        lattice_0.20-41     memoise_1.1.0      </span></a>
 <a class="sourceLine" id="cb24-25" data-line-number="25"><span class="co">#&gt; [13] rlang_0.4.5         Matrix_1.2-18       cli_2.0.2          </span></a>
-<a class="sourceLine" id="cb24-26" data-line-number="26"><span class="co">#&gt; [16] rstudioapi_0.11     yaml_2.2.1          xfun_0.13          </span></a>
-<a class="sourceLine" id="cb24-27" data-line-number="27"><span class="co">#&gt; [19] withr_2.1.2         metafor_2.4-0       stringr_1.4.0      </span></a>
-<a class="sourceLine" id="cb24-28" data-line-number="28"><span class="co">#&gt; [22] roxygen2_7.1.0      knitr_1.28          xml2_1.3.1         </span></a>
-<a class="sourceLine" id="cb24-29" data-line-number="29"><span class="co">#&gt; [25] desc_1.2.0          fs_1.4.1            devtools_2.3.0     </span></a>
-<a class="sourceLine" id="cb24-30" data-line-number="30"><span class="co">#&gt; [28] rprojroot_1.3-2     grid_3.6.3          glue_1.4.0         </span></a>
-<a class="sourceLine" id="cb24-31" data-line-number="31"><span class="co">#&gt; [31] R6_2.4.1            processx_3.4.2      fansi_0.4.1        </span></a>
-<a class="sourceLine" id="cb24-32" data-line-number="32"><span class="co">#&gt; [34] rmarkdown_2.1       sessioninfo_1.1.1   callr_3.4.3        </span></a>
-<a class="sourceLine" id="cb24-33" data-line-number="33"><span class="co">#&gt; [37] purrr_0.3.3         magrittr_1.5        htmltools_0.4.0    </span></a>
-<a class="sourceLine" id="cb24-34" data-line-number="34"><span class="co">#&gt; [40] backports_1.1.6     ps_1.3.2            ellipsis_0.3.0     </span></a>
-<a class="sourceLine" id="cb24-35" data-line-number="35"><span class="co">#&gt; [43] usethis_1.6.0       assertthat_0.2.1    stringi_1.4.6      </span></a>
-<a class="sourceLine" id="cb24-36" data-line-number="36"><span class="co">#&gt; [46] crayon_1.3.4</span></a></code></pre></div>
+<a class="sourceLine" id="cb24-26" data-line-number="26"><span class="co">#&gt; [16] rstudioapi_0.11     yaml_2.2.1          parallel_3.6.3     </span></a>
+<a class="sourceLine" id="cb24-27" data-line-number="27"><span class="co">#&gt; [19] xfun_0.13           withr_2.1.2         metafor_2.4-0      </span></a>
+<a class="sourceLine" id="cb24-28" data-line-number="28"><span class="co">#&gt; [22] stringr_1.4.0       roxygen2_7.1.0      knitr_1.28         </span></a>
+<a class="sourceLine" id="cb24-29" data-line-number="29"><span class="co">#&gt; [25] xml2_1.3.1          desc_1.2.0          fs_1.4.1           </span></a>
+<a class="sourceLine" id="cb24-30" data-line-number="30"><span class="co">#&gt; [28] devtools_2.3.0      rprojroot_1.3-2     grid_3.6.3         </span></a>
+<a class="sourceLine" id="cb24-31" data-line-number="31"><span class="co">#&gt; [31] glue_1.4.0          R6_2.4.1            processx_3.4.2     </span></a>
+<a class="sourceLine" id="cb24-32" data-line-number="32"><span class="co">#&gt; [34] pbmcapply_1.5.0     fansi_0.4.1         rmarkdown_2.1      </span></a>
+<a class="sourceLine" id="cb24-33" data-line-number="33"><span class="co">#&gt; [37] sessioninfo_1.1.1   callr_3.4.3         purrr_0.3.3        </span></a>
+<a class="sourceLine" id="cb24-34" data-line-number="34"><span class="co">#&gt; [40] magrittr_1.5        htmltools_0.4.0     backports_1.1.6    </span></a>
+<a class="sourceLine" id="cb24-35" data-line-number="35"><span class="co">#&gt; [43] ps_1.3.2            ellipsis_0.3.0      usethis_1.6.0      </span></a>
+<a class="sourceLine" id="cb24-36" data-line-number="36"><span class="co">#&gt; [46] assertthat_0.2.1    stringi_1.4.6       crayon_1.3.4</span></a></code></pre></div>
 </div>
 </div>
 

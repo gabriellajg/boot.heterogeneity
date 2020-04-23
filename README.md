@@ -22,8 +22,7 @@ and likelihood, so installation of R package metafor is required.
 ## Installation
 
 You can install the released version of boot.heterogeneity from
-[CRAN](https://cran.r-project.org/web/packages/mc.heterogeneity/index.html)
-with:
+[CRAN](https://cran.r-project.org/package=mc.heterogeneity) with:
 
 ``` r
 install.packages("boot.heterogeneity")

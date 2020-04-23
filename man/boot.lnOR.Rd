@@ -17,7 +17,8 @@ boot.lnOR(
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
-  parallel = TRUE
+  parallel = TRUE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -41,7 +42,12 @@ boot.lnOR(
 
 \item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
+\item{verbose}{if true, show the progress of boostrapping.}
+
 \item{lnOR}{a vector of natural-logarithm-transformed odds ratio in the included studies, which is calculated as ln(n11*n00/n01/n10)}
+}
+\value{
+A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
 }
 \description{
 \code{boot.lnOR} returns the bootstrap-based tests of the residual heterogeneity in random- or mixed- effects model of natural-logarithm-transformed observed odds ratio (lnOR).

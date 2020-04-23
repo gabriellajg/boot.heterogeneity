@@ -2,9 +2,12 @@ Package: boot.heterogeneity
 Type: Package
 Title: A Bootstrap-Based Heterogeneity Test for Meta-Analysis
 Version: 0.1.0
-Author: Han Du <hdu@psych.ucla.edu>, Zijun Ke <keziyun@mail.sysu.edu.cn>, Ge Jiang <gejiang2@illinois.edu>
+Authors@R: c(person("Ge", "Jiang", role = c("aut", "cre"),
+                     email = "gejiang2@illinois.edu"),
+              person("Han", "Du", role = "aut", email = "hdu@psych.ucla.edu"),
+              person("Zijun", "Ke", role = "ctb", email = "keziyun@mail.sysu.edu.cn"))
 Maintainer: Ge Jiang <gejiang2@illinois.edu>
-Description: Implements a bootstrap-based heterogeneity test for standardized mean differences (d), fisher-transformed pearson's correlations (r), and natural-logarithm-transformed odds ratio (or) in meta-analysis studies. depending on the presence of moderators, this monte carlo based test can be implemented in the random or mixed-effects model. this package uses rma() function from the r package 'metafor' to obtain parameter estimates and likelihood, so installation of r package 'metafor' is required.
+Description: Implements a bootstrap-based heterogeneity test for standardized mean differences (d), Fisher-transformed Pearson's correlations (r), and natural-logarithm-transformed odds ratio (or) in meta-analysis studies. Depending on the presence of moderators, this Monte Carlo based test can be implemented in the random- or mixed-effects model. This package uses rma() function from the R package 'metafor' to obtain parameter estimates and likelihoods, so installation of R package 'metafor' is required.
 License: GPL (>= 2)
 Encoding: UTF-8
 LazyData: true

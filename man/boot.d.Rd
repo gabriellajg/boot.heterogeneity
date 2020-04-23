@@ -14,7 +14,8 @@ boot.d(
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
-  parallel = TRUE
+  parallel = TRUE,
+  verbose = FALSE
 )
 }
 \arguments{
@@ -37,6 +38,11 @@ boot.d(
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
 \item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
+
+\item{verbose}{if true, show the progress of boostrapping.}
+}
+\value{
+A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
 }
 \description{
 \code{boot.d} returns the bootstrap-based tests of the residual heterogeneity in random- or mixed- effects model of standardized mean differences (d).
