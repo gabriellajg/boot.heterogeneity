@@ -13,7 +13,7 @@
 #' @param nrep number of replications used in bootstrap simulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
-#' @param parallel if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.
+#' @param parallel if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.
 #' @param verbose if true, show the progress of boostrapping.
 #'
 #' @return A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
@@ -41,14 +41,14 @@
 #' # Fisher's Transformation
 #' z <- 1/2*log((1+r)/(1-r))
 #'
-#' \dontrun{
+#' \donttest{
 #' #' boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 #' }
 #' # Note: this boot.fcor function is supposed to replace its
 #' # earlier version in \link[mc.heterogeneity]{mc.fcor}.
 #' @export
 
-boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE, verbose = FALSE) {
+boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = FALSE, verbose = FALSE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -78,7 +78,8 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   if(verbose){cat("Bootstrapping... \n")}
 
   if(parallel){
-    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, z_overall=z_overall, vi=vi, n=n, mods=mods, mc.cores = parallel::detectCores()-1))
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, z_overall=z_overall, vi=vi, n=n, mods=mods, mc.cores = 2))
+    # parallel::detectCores()-1)
   } else {
     find.c <- matrix(NA, 3, nrep)
     pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)

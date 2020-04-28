@@ -17,7 +17,7 @@
 #' @param nrep number of replications used in bootstrap imulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
-#' @param parallel if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.
+#' @param parallel if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.
 #' @param verbose if true, show the progress of boostrapping.
 #'
 #' @return A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
@@ -28,12 +28,12 @@
 #' @importFrom stats runif
 
 #' @references Hedges, L. V. (1981). Distribution theory for glass’s estimator of effect size and related estimators. Journal of Educational and Behavioral Statistics, 6(2), 107–128.
-#' @references Hedges, L. V., Giaconia, R. M., & Gage, N. L. (1981). Meta-analysis of the effect of open and traditional instruction. Stanford, CA: Stanford University, Program on Teaching Effectiveness.
+#' @references Hedges, L. V., & Olkin, I. (1985). Statistical methods for meta-analysis. San Diego, CA: Academic Press.
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 
 #' @examples
 #' # Demo 1: A meta-analysis of 18 studies in which the effect of open versus
-#' # traditional education on students' self-concept was studied (Hedges et al., 1981).
+#' # traditional education on students' self-concept was studied (Hedges & Olkin, 1985).
 #'
 #' selfconcept <- boot.heterogeneity:::selfconcept
 #'
@@ -46,7 +46,7 @@
 #' cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 #' d <- cm*g
 #'
-#' \dontrun{
+#' \donttest{
 #' boot.run <- boot.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
 #' # is equivalent to:
 #' boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
@@ -54,7 +54,7 @@
 #'
 #'# Demo 2: A hypothetical meta-analysis of 15 studies with 3 moderators.
 #' hypo_moder <- boot.heterogeneity:::hypo_moder
-#' \dontrun{
+#' \donttest{
 #' boot.run3 <- boot.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
 #' mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 #' }
@@ -63,7 +63,7 @@
 #' # earlier version in \link[mc.heterogeneity]{mc.d}.
 #' @export
 
-boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = TRUE, verbose = FALSE) {
+boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = FALSE, verbose = FALSE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -99,7 +99,8 @@ boot.d <- function(n1, n2, est, model = 'random', adjust = FALSE, mods = NULL, n
   if(verbose){cat("Bootstrapping... \n")}
 
   if(parallel){
-    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.d, d_overall=d_overall, vi=vi, n1=n1, n2=n2, mods=mods, mc.cores = parallel::detectCores()-1))
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.d, d_overall=d_overall, vi=vi, n1=n1, n2=n2, mods=mods, mc.cores = 2))
+    # parallel::detectCores()-1)
   } else {
     find.c <- matrix(NA, 3, nrep)
     pb <- utils::txtProgressBar(min = 0, max = nrep, style = 3)

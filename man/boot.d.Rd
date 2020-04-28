@@ -14,7 +14,7 @@ boot.d(
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
-  parallel = TRUE,
+  parallel = FALSE,
   verbose = FALSE
 )
 }
@@ -37,7 +37,7 @@ boot.d(
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
-\item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
+\item{parallel}{if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
 \item{verbose}{if true, show the progress of boostrapping.}
 }
@@ -56,7 +56,7 @@ The results of significances are classified as "sig" or "n.s" based on the cutof
 }
 \examples{
 # Demo 1: A meta-analysis of 18 studies in which the effect of open versus
-# traditional education on students' self-concept was studied (Hedges et al., 1981).
+# traditional education on students' self-concept was studied (Hedges & Olkin, 1985).
 
 selfconcept <- boot.heterogeneity:::selfconcept
 
@@ -69,7 +69,7 @@ g <- selfconcept$g
 cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 d <- cm*g
 
-\dontrun{
+\donttest{
 boot.run <- boot.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
 # is equivalent to:
 boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
@@ -77,7 +77,7 @@ boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.
 
 # Demo 2: A hypothetical meta-analysis of 15 studies with 3 moderators.
 hypo_moder <- boot.heterogeneity:::hypo_moder
-\dontrun{
+\donttest{
 boot.run3 <- boot.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
 mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 }
@@ -88,7 +88,7 @@ mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0
 \references{
 Hedges, L. V. (1981). Distribution theory for glass’s estimator of effect size and related estimators. Journal of Educational and Behavioral Statistics, 6(2), 107–128.
 
-Hedges, L. V., Giaconia, R. M., & Gage, N. L. (1981). Meta-analysis of the effect of open and traditional instruction. Stanford, CA: Stanford University, Program on Teaching Effectiveness.
+Hedges, L. V., & Olkin, I. (1985). Statistical methods for meta-analysis. San Diego, CA: Academic Press.
 
 Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 }

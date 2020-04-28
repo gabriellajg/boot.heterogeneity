@@ -12,7 +12,7 @@ boot.fcor(
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
-  parallel = TRUE,
+  parallel = FALSE,
   verbose = FALSE
 )
 }
@@ -31,7 +31,7 @@ boot.fcor(
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
-\item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
+\item{parallel}{if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
 \item{verbose}{if true, show the progress of boostrapping.}
 }
@@ -61,7 +61,7 @@ r <- sensation$r
 # Fisher's Transformation
 z <- 1/2*log((1+r)/(1-r))
 
-\dontrun{
+\donttest{
 #' boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 }
 # Note: this boot.fcor function is supposed to replace its

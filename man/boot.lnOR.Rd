@@ -4,7 +4,7 @@
 \alias{boot.lnOR}
 \title{Natural-Logarithm-Transformed Odds Ratio (lnOR): Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \source{
-C. Silagy (2003), Nicotine replacement therapy for smoking cessation (Cochrane Review). The Cochrane Library, 4, John Wiley \& Sons, Chichester.
+Silagy  C, Lancaster  T, Stead  LF, Mant  D, Fowler  G. (2004). Nicotine replacement therapy for smoking cessation. Cochrane Database of Systematic Reviews 2004, Issue 3. Art. No.: CD000146. DOI: 10.1002/14651858.CD000146.pub2.
 }
 \usage{
 boot.lnOR(
@@ -17,7 +17,7 @@ boot.lnOR(
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
-  parallel = TRUE,
+  parallel = FALSE,
   verbose = FALSE
 )
 }
@@ -40,7 +40,7 @@ boot.lnOR(
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
-\item{parallel}{if true, parallel computing will be performed during bootstrapping stage. Otherwise, for loop is used.}
+\item{parallel}{if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
 \item{verbose}{if true, show the progress of boostrapping.}
 
@@ -70,7 +70,7 @@ n_10 <- smoking$tt - smoking$qt # receive treatement but not stop smoking
 n_11 <- smoking$qt # receive treatement and stop smoking
 lnOR <- log(n_11*n_00/n_01/n_10)
 
-\dontrun{
+\donttest{
 boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 }
 # Note: this boot.lnOR function is supposed to replace
