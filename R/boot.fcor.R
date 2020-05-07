@@ -41,7 +41,7 @@
 #' # Fisher's Transformation
 #' z <- 1/2*log((1+r)/(1-r))
 #'
-#' \donttest{
+#' \dontrun{
 #' #' boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 #' }
 #' # Note: this boot.fcor function is supposed to replace its

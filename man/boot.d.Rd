@@ -69,7 +69,7 @@ g <- selfconcept$g
 cm <- (1-3/(4*(n1+n2-2)-1)) #correct factor to compensate for small sample bias (Hedges, 1981)
 d <- cm*g
 
-\donttest{
+\dontrun{
 boot.run <- boot.d(n1, n2, est = d, model = 'random', p_cut = 0.05)
 # is equivalent to:
 boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.05)
@@ -77,7 +77,7 @@ boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.
 
 # Demo 2: A hypothetical meta-analysis of 15 studies with 3 moderators.
 hypo_moder <- boot.heterogeneity:::hypo_moder
-\donttest{
+\dontrun{
 boot.run3 <- boot.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, model = 'mixed',
 mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 }

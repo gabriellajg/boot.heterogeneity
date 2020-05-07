@@ -70,7 +70,7 @@ n_10 <- smoking$tt - smoking$qt # receive treatement but not stop smoking
 n_11 <- smoking$qt # receive treatement and stop smoking
 lnOR <- log(n_11*n_00/n_01/n_10)
 
-\donttest{
+\dontrun{
 boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 }
 # Note: this boot.lnOR function is supposed to replace
