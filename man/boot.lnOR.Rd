@@ -32,7 +32,7 @@ boot.lnOR(
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 
-\item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.}
+\item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.}
 
 \item{nrep}{number of replications used in bootstrap simulations. Default to 10^4.}
 
@@ -60,7 +60,7 @@ The results of significances are classified as "sig" or "n.s" based on the cutof
 }
 \examples{
 # A meta-analysis consists of 26 studies on nicotine replacement therapy for smoking cessation
-library(HSAUR2)
+library(HSAUR3)
 data(smoking)
 
 # Y1: receive treatment; Y2: stop smoking
@@ -73,8 +73,6 @@ lnOR <- log(n_11*n_00/n_01/n_10)
 \dontrun{
 boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 }
-# Note: this boot.lnOR function is supposed to replace
-# its earlier version in \link[mc.heterogeneity]{mc.lnOR}.
 }
 \references{
 Anscombe, F. J. (1956). On estimating binomial response relations. Biometrika, 43(3/4), 461–464.

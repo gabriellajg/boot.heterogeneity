@@ -29,7 +29,7 @@ test_that("boot.fcor", {
 
 
 test_that("boot.lnOR", {
-  library(HSAUR2)
+  library(HSAUR3)
   data(smoking)
   n_00 <- smoking$tc - smoking$qc  # not receive treatement yet not stop smoking
   n_01 <- smoking$qc # not receive treatement but stop smoking

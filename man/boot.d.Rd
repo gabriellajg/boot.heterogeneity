@@ -29,7 +29,7 @@ boot.d(
 
 \item{adjust}{if biased estimates (i.e., g values) are provided, \code{adjust} must be set to \code{TRUE} to compensate for small sample bias. By default, \code{adjust} is set to \code{FALSE}.}
 
-\item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.}
+\item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.}
 
 \item{nrep}{number of replications used in bootstrap imulations. Default to 10^4.}
 
@@ -82,8 +82,6 @@ boot.run3 <- boot.d(n1 = hypo_moder$n1, n2 = hypo_moder$n2, est = hypo_moder$d, 
 mods = cbind(hypo_moder$cov.z1, hypo_moder$cov.z2, hypo_moder$cov.z3), p_cut = 0.05)
 }
 
-# Note: this boot.d function is supposed to replace its
-# earlier version in \link[mc.heterogeneity]{mc.d}.
 }
 \references{
 Hedges, L. V. (1981). Distribution theory for glass’s estimator of effect size and related estimators. Journal of Educational and Behavioral Statistics, 6(2), 107–128.

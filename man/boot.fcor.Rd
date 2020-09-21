@@ -23,7 +23,7 @@ boot.fcor(
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 
-\item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.}
+\item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.}
 
 \item{nrep}{number of replications used in bootstrap simulations. Default to 10^4.}
 
@@ -64,8 +64,6 @@ z <- 1/2*log((1+r)/(1-r))
 \dontrun{
 #' boot.run <- boot.fcor(n, z, model = 'random', p_cut = 0.05)
 }
-# Note: this boot.fcor function is supposed to replace its
-# earlier version in \link[mc.heterogeneity]{mc.fcor}.
 }
 \references{
 Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation seeking. New York, NY: Cambridge University Press.

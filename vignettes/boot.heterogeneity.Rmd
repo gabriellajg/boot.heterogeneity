@@ -216,10 +216,10 @@ boot.run.cor
 
 `boot.lnOR()` is the function to test the between-study heterogeneity in meta-analysis of Natural-logarithm-transformed odds ratio (OR). 
 
-Load the example dataset `smoking` from R package `HSAUR2`: 
+Load the example dataset `smoking` from R package `HSAUR3`: 
 
 ```{r}
-library(HSAUR2)
+library(HSAUR3)
 data(smoking)
 ```
 

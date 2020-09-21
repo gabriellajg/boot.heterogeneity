@@ -14,13 +14,29 @@
 
 <title>A Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Meta-Analysis</title>
 
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
 
 
 <style type="text/css">code{white-space: pre;}</style>
 <style type="text/css" data-origin="pandoc">
-a.sourceLine { display: inline-block; line-height: 1.25; }
-a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
-a.sourceLine:empty { height: 1.2em; }
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
 .sourceCode { overflow: visible; }
 code.sourceCode { white-space: pre; position: relative; }
 div.sourceCode { margin: 1em 0; }
@@ -30,14 +46,16 @@ div.sourceCode { overflow: auto; }
 }
 @media print {
 code.sourceCode { white-space: pre-wrap; }
-a.sourceLine { text-indent: -1em; padding-left: 1em; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
 }
-pre.numberSource a.sourceLine
-  { position: relative; left: -4em; }
-pre.numberSource a.sourceLine::before
-  { content: attr(data-line-number);
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
     position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; pointer-events: all; display: inline-block;
+    border: none; display: inline-block;
     -webkit-touch-callout: none; -webkit-user-select: none;
     -khtml-user-select: none; -moz-user-select: none;
     -ms-user-select: none; user-select: none;
@@ -46,9 +64,9 @@ pre.numberSource a.sourceLine::before
   }
 pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
 div.sourceCode
-  {  }
+  {   }
 @media screen {
-a.sourceLine::before { text-decoration: underline; }
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
 }
 code span.al { color: #ff0000; font-weight: bold; } /* Alert */
 code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
@@ -316,12 +334,12 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="installation-of-the-package" class="section level2">
 <h2>0. Installation of the package</h2>
 <p>Install the released version of boot.heterogeneity from <a href="https://cran.r-project.org/package=mc.heterogeneity">CRAN</a> with:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">install.packages</span>(<span class="st">&quot;boot.heterogeneity&quot;</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">install.packages</span>(<span class="st">&quot;boot.heterogeneity&quot;</span>)</span></code></pre></div>
 <p>Or install the development version from <a href="https://github.com/gabriellajg/boot.heterogeneity">GitHub</a> with:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1"><span class="co">#install.packages(&quot;devtools&quot;)</span></a>
-<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">library</span>(devtools)</a>
-<a class="sourceLine" id="cb2-3" data-line-number="3">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;gabriellajg/boot.heterogeneity&quot;</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</a>
-<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="kw">library</span>(boot.heterogeneity)</a></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="co">#install.packages(&quot;devtools&quot;)</span></span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="kw">library</span>(devtools)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;gabriellajg/boot.heterogeneity&quot;</span>, <span class="dt">force =</span> <span class="ot">TRUE</span>, <span class="dt">build_vignettes =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="kw">library</span>(boot.heterogeneity)</span></code></pre></div>
 <div id="standardized-mean-differences-d" class="section level3">
 <h3>1. Standardized Mean Differences (d)</h3>
 <p><code>boot.d()</code> is the function to test the between-study heterogeneity in meta-analysis of standardized mean differences (d).</p>
@@ -329,37 +347,37 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="without-moderators" class="section level3">
 <h3>1.1 Without moderators</h3>
 <p>Load the example dataset <code>selfconcept</code> first:</p>
-<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">selfconcept &lt;-<span class="st"> </span>boot.heterogeneity<span class="op">:::</span>selfconcept</a></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>selfconcept &lt;-<span class="st"> </span>boot.heterogeneity<span class="op">:::</span>selfconcept</span></code></pre></div>
 <p><code>selfconcept</code> consists of 18 studies in which the effect of open versus traditional education on students’ self-concept was studied (Hedges et al., 1981). The columns of <code>selfconcept</code> are: sample sizes of the two groups (<code>n1</code> and <code>n2</code>), Hedges’s <code>g</code>, Cohen’s <code>d</code>, and a moderator <code>X</code> (<code>X</code> not used in the current example).</p>
-<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">head</span>(selfconcept, <span class="dv">3</span>)</a>
-<a class="sourceLine" id="cb4-2" data-line-number="2"><span class="co">#&gt;    n1  n2      g           d      X</span></a>
-<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt; 1 100 180  0.100  0.09972997  0.100</span></a>
-<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; 2 131 138 -0.162 -0.16154452 -0.162</span></a>
-<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; 3  40  40 -0.090 -0.08913183 -0.091</span></a></code></pre></div>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">head</span>(selfconcept, <span class="dv">3</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt;    n1  n2      g           d      X</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; 1 100 180  0.100  0.09972997  0.100</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; 2 131 138 -0.162 -0.16154452 -0.162</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; 3  40  40 -0.090 -0.08913183 -0.091</span></span></code></pre></div>
 <p>Extract the required arguments from <code>selfconcept</code>:</p>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># n1 and n2 are lists of samples sizes in two groups</span></a>
-<a class="sourceLine" id="cb5-2" data-line-number="2">n1 &lt;-<span class="st"> </span>selfconcept<span class="op">$</span>n1</a>
-<a class="sourceLine" id="cb5-3" data-line-number="3">n2 &lt;-<span class="st"> </span>selfconcept<span class="op">$</span>n2</a>
-<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co"># g is a list of effect sizes</span></a>
-<a class="sourceLine" id="cb5-5" data-line-number="5">g &lt;-<span class="st"> </span>selfconcept<span class="op">$</span>g</a></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># n1 and n2 are lists of samples sizes in two groups</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>n1 &lt;-<span class="st"> </span>selfconcept<span class="op">$</span>n1</span>
+<span id="cb5-3"><a href="#cb5-3"></a>n2 &lt;-<span class="st"> </span>selfconcept<span class="op">$</span>n2</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co"># g is a list of effect sizes</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>g &lt;-<span class="st"> </span>selfconcept<span class="op">$</span>g</span></code></pre></div>
 <p>If <code>g</code> is a list of biased estimates of standardized mean differences in the meta-analytical study, a small-sample adjustment must be applied:</p>
-<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">cm &lt;-<span class="st"> </span>(<span class="dv">1-3</span><span class="op">/</span>(<span class="dv">4</span><span class="op">*</span>(n1<span class="op">+</span>n2<span class="dv">-2</span>)<span class="op">-</span><span class="dv">1</span>)) <span class="co">#correct factor to compensate for small sample bias (Hedges, 1981)</span></a>
-<a class="sourceLine" id="cb6-2" data-line-number="2">d &lt;-<span class="st"> </span>cm<span class="op">*</span>g</a></code></pre></div>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>cm &lt;-<span class="st"> </span>(<span class="dv">1-3</span><span class="op">/</span>(<span class="dv">4</span><span class="op">*</span>(n1<span class="op">+</span>n2<span class="dv">-2</span>)<span class="op">-</span><span class="dv">1</span>)) <span class="co">#correct factor to compensate for small sample bias (Hedges, 1981)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>d &lt;-<span class="st"> </span>cm<span class="op">*</span>g</span></code></pre></div>
 <p>Run the heterogeneity test using function <code>boot.d()</code> and adjusted effect size <code>d</code>:</p>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">boot.run &lt;-<span class="st"> </span><span class="kw">boot.d</span>(n1, n2, <span class="dt">est =</span> d, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>boot.run &lt;-<span class="st"> </span><span class="kw">boot.d</span>(n1, n2, <span class="dt">est =</span> d, <span class="dt">model =</span> <span class="st">&#39;random&#39;</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <p>Alternatively, such an adjustment can be performed on unadjusted effect size <code>g</code> by specifying <code>adjust = TRUE</code>:</p>
-<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1">boot.run2 &lt;-<span class="st"> </span><span class="kw">boot.d</span>(n1, n2, <span class="dt">est =</span> g, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">adjust =</span> <span class="ot">TRUE</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>boot.run2 &lt;-<span class="st"> </span><span class="kw">boot.d</span>(n1, n2, <span class="dt">est =</span> g, <span class="dt">model =</span> <span class="st">&#39;random&#39;</span>, <span class="dt">adjust =</span> <span class="ot">TRUE</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <p><code>boot.run</code> and <code>boot.run2</code> will return the same results:</p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">boot.run</a>
-<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="co">#&gt;                  stat  p_value Heterogeneity</span></a>
-<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt; Qtest       23.391659 0.136929           n.s</span></a>
-<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  23.391659 0.127800           n.s</span></a>
-<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; boot.REML    2.037578 0.053100           n.s</span></a></code></pre></div>
-<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">boot.run2</a>
-<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;                  stat  p_value Heterogeneity</span></a>
-<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; Qtest       23.391659 0.136929           n.s</span></a>
-<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  23.391659 0.127800           n.s</span></a>
-<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; boot.REML    2.037578 0.053100           n.s</span></a></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>boot.run</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt;                  stat  p_value Heterogeneity</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt; Qtest       23.391659 0.136929           n.s</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; boot.Qtest  23.391659 0.127800           n.s</span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt; boot.REML    2.037578 0.053100           n.s</span></span></code></pre></div>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>boot.run2</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt;                  stat  p_value Heterogeneity</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; Qtest       23.391659 0.136929           n.s</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; boot.Qtest  23.391659 0.127800           n.s</span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; boot.REML    2.037578 0.053100           n.s</span></span></code></pre></div>
 <ul>
 <li><p>The first line presents the results of Q-test of a random-effects model. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level (i.e., nominal alpha level) of either 0.05 or 0.1, this statistic is n.s (not significant). The homogeneity assumption is not rejected.</p></li>
 <li><p>The second line presents the results of bootstrap-based Q test. The Q-statistic is still 23.39 but the bootstrap-based p-value is 0.128. This statistic is n.s (not significant) and the assumption of homogeneity is not rejected with an alpha level of 0.05.</p></li>
@@ -369,29 +387,29 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="with-moderators" class="section level3">
 <h3>1.2 With moderators</h3>
 <p>Load an hypothetical dataset <code>hypo_moder</code> first:</p>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">hypo_moder &lt;-<span class="st"> </span>boot.heterogeneity<span class="op">:::</span>hypo_moder</a></code></pre></div>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>hypo_moder &lt;-<span class="st"> </span>boot.heterogeneity<span class="op">:::</span>hypo_moder</span></code></pre></div>
 <p>Three moderators (cov.z1, cov.z2, cov.z3) are included:</p>
-<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">head</span>(hypo_moder)</a>
-<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt;    n1  n2          d       cov.z1      cov.z2     cov.z3</span></a>
-<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; 1  59  65  0.8131324 -0.005767173  0.80418951  1.2383041</span></a>
-<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; 2 166 165  1.0243732  2.404653389 -0.05710677 -0.2793463</span></a>
-<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; 3  68  68  1.5954236  0.763593461  0.50360797  1.7579031</span></a>
-<a class="sourceLine" id="cb12-6" data-line-number="6"><span class="co">#&gt; 4  44  31  0.6809888 -0.799009249  1.08576936  0.5607461</span></a>
-<a class="sourceLine" id="cb12-7" data-line-number="7"><span class="co">#&gt; 5  98  95 -1.3017946 -1.147657009 -0.69095384 -0.4527840</span></a>
-<a class="sourceLine" id="cb12-8" data-line-number="8"><span class="co">#&gt; 6  44  31 -1.9398508 -0.289461574 -1.28459935 -0.8320433</span></a></code></pre></div>
-<p>Again, run the heterogeneity test using <code>boot.d()</code> with all moderators included in a matrix <code>mods</code> and model type specified as <code>model = 'mixed'</code>:</p>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">boot.run3 &lt;-<span class="st"> </span><span class="kw">boot.d</span>(<span class="dt">n1 =</span> hypo_moder<span class="op">$</span>n1, </a>
-<a class="sourceLine" id="cb13-2" data-line-number="2">                <span class="dt">n2 =</span> hypo_moder<span class="op">$</span>n2, </a>
-<a class="sourceLine" id="cb13-3" data-line-number="3">                <span class="dt">est =</span> hypo_moder<span class="op">$</span>d, </a>
-<a class="sourceLine" id="cb13-4" data-line-number="4">                <span class="dt">model =</span> <span class="st">'mixed'</span>, </a>
-<a class="sourceLine" id="cb13-5" data-line-number="5">                <span class="dt">mods =</span> <span class="kw">cbind</span>(hypo_moder<span class="op">$</span>cov.z1, hypo_moder<span class="op">$</span>cov.z2, hypo_moder<span class="op">$</span>cov.z3), </a>
-<a class="sourceLine" id="cb13-6" data-line-number="6">                <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">head</span>(hypo_moder)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="co">#&gt;    n1  n2          d       cov.z1      cov.z2     cov.z3</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; 1  59  65  0.8131324 -0.005767173  0.80418951  1.2383041</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="co">#&gt; 2 166 165  1.0243732  2.404653389 -0.05710677 -0.2793463</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; 3  68  68  1.5954236  0.763593461  0.50360797  1.7579031</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="co">#&gt; 4  44  31  0.6809888 -0.799009249  1.08576936  0.5607461</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; 5  98  95 -1.3017946 -1.147657009 -0.69095384 -0.4527840</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="co">#&gt; 6  44  31 -1.9398508 -0.289461574 -1.28459935 -0.8320433</span></span></code></pre></div>
+<p>Again, run the heterogeneity test using <code>boot.d()</code> with all moderators included in a matrix <code>mods</code> and model type specified as <code>model = &#39;mixed&#39;</code>:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>boot.run3 &lt;-<span class="st"> </span><span class="kw">boot.d</span>(<span class="dt">n1 =</span> hypo_moder<span class="op">$</span>n1, </span>
+<span id="cb13-2"><a href="#cb13-2"></a>                <span class="dt">n2 =</span> hypo_moder<span class="op">$</span>n2, </span>
+<span id="cb13-3"><a href="#cb13-3"></a>                <span class="dt">est =</span> hypo_moder<span class="op">$</span>d, </span>
+<span id="cb13-4"><a href="#cb13-4"></a>                <span class="dt">model =</span> <span class="st">&#39;mixed&#39;</span>, </span>
+<span id="cb13-5"><a href="#cb13-5"></a>                <span class="dt">mods =</span> <span class="kw">cbind</span>(hypo_moder<span class="op">$</span>cov.z1, hypo_moder<span class="op">$</span>cov.z2, hypo_moder<span class="op">$</span>cov.z3), </span>
+<span id="cb13-6"><a href="#cb13-6"></a>                <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <p>The results in <code>boot.run3</code> will in the same format as <code>boot.run</code> and <code>boot.run2</code>:</p>
-<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">boot.run3</a>
-<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="co">#&gt;                  stat    p_value  Heterogeneity</span></a>
-<a class="sourceLine" id="cb14-3" data-line-number="3"><span class="co">#&gt; Qtest       31.849952  0.000806             sig</span></a>
-<a class="sourceLine" id="cb14-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  31.849952  0.000600             sig</span></a>
-<a class="sourceLine" id="cb14-5" data-line-number="5"><span class="co">#&gt; boot.REML    9.283428  0.000400             sig</span></a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>boot.run3</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt;                  stat    p_value  Heterogeneity</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="co">#&gt; Qtest       31.849952  0.000806             sig</span></span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; boot.Qtest  31.849952  0.000600             sig</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a><span class="co">#&gt; boot.REML    9.283428  0.000400             sig</span></span></code></pre></div>
 <p>In the presence of moderators, the function above tests whether the variability in the true standardized mean differences after accounting for the moderators included in the model is larger than sampling variability alone (Viechtbauer, 2010).</p>
 <ul>
 <li><p>In the first line, the Q-statistic is Q(df = 11) = 31.85 and the associated p-value is 0.0008. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes after accounting for the moderators are heterogeneous.</p></li>
@@ -406,22 +424,22 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <h3>2. Fisher-transformed Pearson’s correlations (r)</h3>
 <p><code>boot.fcor()</code> is the function to test the between-study heterogeneity in meta-analysis of Fisher-transformed Pearson’s correlations (r).</p>
 <p>Load the example dataset <code>sensation</code> first:</p>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">sensation &lt;-<span class="st"> </span>boot.heterogeneity<span class="op">:::</span>sensation</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a>sensation &lt;-<span class="st"> </span>boot.heterogeneity<span class="op">:::</span>sensation</span></code></pre></div>
 <p>Extract the required arguments from <code>sensation</code>:</p>
-<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1"><span class="co"># n is a list of samples sizes</span></a>
-<a class="sourceLine" id="cb16-2" data-line-number="2">n &lt;-<span class="st"> </span>sensation<span class="op">$</span>n</a>
-<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="co"># Pearson's correlation</span></a>
-<a class="sourceLine" id="cb16-4" data-line-number="4">r &lt;-<span class="st"> </span>sensation<span class="op">$</span>r</a>
-<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co"># Fisher's Transformation</span></a>
-<a class="sourceLine" id="cb16-6" data-line-number="6">z &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span><span class="op">+</span>r)<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>r))</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="co"># n is a list of samples sizes</span></span>
+<span id="cb16-2"><a href="#cb16-2"></a>n &lt;-<span class="st"> </span>sensation<span class="op">$</span>n</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co"># Pearson&#39;s correlation</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a>r &lt;-<span class="st"> </span>sensation<span class="op">$</span>r</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co"># Fisher&#39;s Transformation</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>z &lt;-<span class="st"> </span><span class="dv">1</span><span class="op">/</span><span class="dv">2</span><span class="op">*</span><span class="kw">log</span>((<span class="dv">1</span><span class="op">+</span>r)<span class="op">/</span>(<span class="dv">1</span><span class="op">-</span>r))</span></code></pre></div>
 <p>Run the heterogeneity test using <code>boot.fcor()</code>:</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">boot.run.cor &lt;-<span class="st"> </span><span class="kw">boot.fcor</span>(n, z, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a>boot.run.cor &lt;-<span class="st"> </span><span class="kw">boot.fcor</span>(n, z, <span class="dt">model =</span> <span class="st">&#39;random&#39;</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <p>The test of between-study heterogeneity has the following results:</p>
-<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">boot.run.cor</a>
-<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="co">#&gt;                  stat    p_value    Heterogeneity</span></a>
-<a class="sourceLine" id="cb18-3" data-line-number="3"><span class="co">#&gt; Qtest       29.060970  0.00385868             sig</span></a>
-<a class="sourceLine" id="cb18-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  29.060970  0.00240072             sig</span></a>
-<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="co">#&gt; boot.REML    6.133111  0.00400882             sig</span></a></code></pre></div>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a>boot.run.cor</span>
+<span id="cb18-2"><a href="#cb18-2"></a><span class="co">#&gt;                  stat    p_value    Heterogeneity</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="co">#&gt; Qtest       29.060970  0.00385868             sig</span></span>
+<span id="cb18-4"><a href="#cb18-4"></a><span class="co">#&gt; boot.Qtest  29.060970  0.00240072             sig</span></span>
+<span id="cb18-5"><a href="#cb18-5"></a><span class="co">#&gt; boot.REML    6.133111  0.00400882             sig</span></span></code></pre></div>
 <ul>
 <li><p>In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes are heterogeneous.</p></li>
 <li><p>In the second line, the Q-statistic is still 29.06 but the bootstrap-based p-value is 0.0024. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.</p></li>
@@ -431,73 +449,69 @@ code > span.er { color: #a61717; background-color: #e3d2d2; }
 <div id="natural-logarithm-transformed-odds-ratio-or" class="section level3">
 <h3>3. Natural-logarithm-transformed odds ratio (OR)</h3>
 <p><code>boot.lnOR()</code> is the function to test the between-study heterogeneity in meta-analysis of Natural-logarithm-transformed odds ratio (OR).</p>
-<p>Load the example dataset <code>smoking</code> from R package <code>HSAUR2</code>:</p>
-<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="kw">library</span>(HSAUR2)</a>
-<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="co">#&gt; Loading required package: tools</span></a>
-<a class="sourceLine" id="cb19-3" data-line-number="3"><span class="kw">data</span>(smoking)</a></code></pre></div>
+<p>Load the example dataset <code>smoking</code> from R package <code>HSAUR3</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1"></a><span class="kw">library</span>(HSAUR3)</span>
+<span id="cb19-2"><a href="#cb19-2"></a><span class="co">#&gt; Loading required package: tools</span></span>
+<span id="cb19-3"><a href="#cb19-3"></a><span class="kw">data</span>(smoking)</span></code></pre></div>
 <p>Extract the required arguments from <code>smoking</code>:</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1"><span class="co"># Y1: receive treatment; Y2: stop smoking</span></a>
-<a class="sourceLine" id="cb20-2" data-line-number="2">n_<span class="dv">00</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>tc <span class="op">-</span><span class="st"> </span>smoking<span class="op">$</span>qc  <span class="co"># not receive treatement yet not stop smoking</span></a>
-<a class="sourceLine" id="cb20-3" data-line-number="3">n_<span class="dv">01</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>qc <span class="co"># not receive treatement but stop smoking</span></a>
-<a class="sourceLine" id="cb20-4" data-line-number="4">n_<span class="dv">10</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>tt <span class="op">-</span><span class="st"> </span>smoking<span class="op">$</span>qt <span class="co"># receive treatement but not stop smoking</span></a>
-<a class="sourceLine" id="cb20-5" data-line-number="5">n_<span class="dv">11</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>qt <span class="co"># receive treatement and stop smoking</span></a></code></pre></div>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1"></a><span class="co"># Y1: receive treatment; Y2: stop smoking</span></span>
+<span id="cb20-2"><a href="#cb20-2"></a>n_<span class="dv">00</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>tc <span class="op">-</span><span class="st"> </span>smoking<span class="op">$</span>qc  <span class="co"># not receive treatement yet not stop smoking</span></span>
+<span id="cb20-3"><a href="#cb20-3"></a>n_<span class="dv">01</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>qc <span class="co"># not receive treatement but stop smoking</span></span>
+<span id="cb20-4"><a href="#cb20-4"></a>n_<span class="dv">10</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>tt <span class="op">-</span><span class="st"> </span>smoking<span class="op">$</span>qt <span class="co"># receive treatement but not stop smoking</span></span>
+<span id="cb20-5"><a href="#cb20-5"></a>n_<span class="dv">11</span> &lt;-<span class="st"> </span>smoking<span class="op">$</span>qt <span class="co"># receive treatement and stop smoking</span></span></code></pre></div>
 <p>The log odds ratios can be computed, but they are not needed by <code>boot.lnOR()</code>:</p>
-<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">lnOR &lt;-<span class="st"> </span><span class="kw">log</span>(n_<span class="dv">11</span><span class="op">*</span>n_<span class="dv">00</span><span class="op">/</span>n_<span class="dv">01</span><span class="op">/</span>n_<span class="dv">10</span>)</a>
-<a class="sourceLine" id="cb21-2" data-line-number="2">lnOR</a>
-<a class="sourceLine" id="cb21-3" data-line-number="3"><span class="co">#&gt;  [1]  0.6151856 -0.0235305  0.5658078  0.4274440  1.0814445  0.9109288</span></a>
-<a class="sourceLine" id="cb21-4" data-line-number="4"><span class="co">#&gt;  [7]  0.9647431  0.7103890  1.0375520 -0.1407277  0.7747272  1.7924180</span></a>
-<a class="sourceLine" id="cb21-5" data-line-number="5"><span class="co">#&gt; [13]  1.2021192  0.3607987  0.2876821  0.2110139  1.2591392  0.1549774</span></a>
-<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt; [19]  1.3411739  0.2963470  0.6116721  0.3786539  0.5389965  0.7532417</span></a>
-<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">#&gt; [25]  0.5653138  0.3786539</span></a></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1"></a>lnOR &lt;-<span class="st"> </span><span class="kw">log</span>(n_<span class="dv">11</span><span class="op">*</span>n_<span class="dv">00</span><span class="op">/</span>n_<span class="dv">01</span><span class="op">/</span>n_<span class="dv">10</span>)</span>
+<span id="cb21-2"><a href="#cb21-2"></a>lnOR</span>
+<span id="cb21-3"><a href="#cb21-3"></a><span class="co">#&gt;  [1]  0.6151856 -0.0235305  0.5658078  0.4274440  1.0814445  0.9109288</span></span>
+<span id="cb21-4"><a href="#cb21-4"></a><span class="co">#&gt;  [7]  0.9647431  0.7103890  1.0375520 -0.1407277  0.7747272  1.7924180</span></span>
+<span id="cb21-5"><a href="#cb21-5"></a><span class="co">#&gt; [13]  1.2021192  0.3607987  0.2876821  0.2110139  1.2591392  0.1549774</span></span>
+<span id="cb21-6"><a href="#cb21-6"></a><span class="co">#&gt; [19]  1.3411739  0.2963470  0.6116721  0.3786539  0.5389965  0.7532417</span></span>
+<span id="cb21-7"><a href="#cb21-7"></a><span class="co">#&gt; [25]  0.5653138  0.3786539</span></span></code></pre></div>
 <p>Run the heterogeneity test using <code>boot.lnOR()</code>:</p>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">boot.run.lnOR &lt;-<span class="st"> </span><span class="kw">boot.lnOR</span>(n_<span class="dv">00</span>, n_<span class="dv">01</span>, n_<span class="dv">10</span>, n_<span class="dv">11</span>, <span class="dt">model =</span> <span class="st">'random'</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>) </a></code></pre></div>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1"></a>boot.run.lnOR &lt;-<span class="st"> </span><span class="kw">boot.lnOR</span>(n_<span class="dv">00</span>, n_<span class="dv">01</span>, n_<span class="dv">10</span>, n_<span class="dv">11</span>, <span class="dt">model =</span> <span class="st">&#39;random&#39;</span>, <span class="dt">p_cut =</span> <span class="fl">0.05</span>) </span></code></pre></div>
 <p>The test of between-study heterogeneity has the following results:</p>
-<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1">boot.run.lnOR</a>
-<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="co">#&gt;                  stat    p_value    Heterogeneity</span></a>
-<a class="sourceLine" id="cb23-3" data-line-number="3"><span class="co">#&gt; Qtest       34.873957  0.09050857             n.s</span></a>
-<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="co">#&gt; boot.Qtest  34.873957  0.08826793             n.s</span></a>
-<a class="sourceLine" id="cb23-5" data-line-number="5"><span class="co">#&gt; boot.REML    3.071329  0.03706729             sig</span></a></code></pre></div>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1"></a>boot.run.lnOR</span>
+<span id="cb23-2"><a href="#cb23-2"></a><span class="co">#&gt;                  stat    p_value    Heterogeneity</span></span>
+<span id="cb23-3"><a href="#cb23-3"></a><span class="co">#&gt; Qtest       34.873957  0.09050857             n.s</span></span>
+<span id="cb23-4"><a href="#cb23-4"></a><span class="co">#&gt; boot.Qtest  34.873957  0.08826793             n.s</span></span>
+<span id="cb23-5"><a href="#cb23-5"></a><span class="co">#&gt; boot.REML    3.071329  0.03706729             sig</span></span></code></pre></div>
 <ul>
 <li><p>In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected.</p></li>
 <li><p>In the second line, the Q-statistic is still 34.87 but the bootstrap-based p-value is 0.088. This means that the assumption of homogeneity marginally significant but not rejected at an alpha level of 0.05.</p></li>
 <li><p>In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.</p></li>
 </ul>
-<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="kw">sessionInfo</span>()</a>
-<a class="sourceLine" id="cb24-2" data-line-number="2"><span class="co">#&gt; R version 3.6.3 (2020-02-29)</span></a>
-<a class="sourceLine" id="cb24-3" data-line-number="3"><span class="co">#&gt; Platform: x86_64-apple-darwin15.6.0 (64-bit)</span></a>
-<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co">#&gt; Running under: macOS Catalina 10.15.4</span></a>
-<a class="sourceLine" id="cb24-5" data-line-number="5"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb24-6" data-line-number="6"><span class="co">#&gt; Matrix products: default</span></a>
-<a class="sourceLine" id="cb24-7" data-line-number="7"><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib</span></a>
-<a class="sourceLine" id="cb24-8" data-line-number="8"><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib</span></a>
-<a class="sourceLine" id="cb24-9" data-line-number="9"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb24-10" data-line-number="10"><span class="co">#&gt; locale:</span></a>
-<a class="sourceLine" id="cb24-11" data-line-number="11"><span class="co">#&gt; [1] C/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></a>
-<a class="sourceLine" id="cb24-12" data-line-number="12"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb24-13" data-line-number="13"><span class="co">#&gt; attached base packages:</span></a>
-<a class="sourceLine" id="cb24-14" data-line-number="14"><span class="co">#&gt; [1] tools     stats     graphics  grDevices utils     datasets  methods  </span></a>
-<a class="sourceLine" id="cb24-15" data-line-number="15"><span class="co">#&gt; [8] base     </span></a>
-<a class="sourceLine" id="cb24-16" data-line-number="16"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb24-17" data-line-number="17"><span class="co">#&gt; other attached packages:</span></a>
-<a class="sourceLine" id="cb24-18" data-line-number="18"><span class="co">#&gt; [1] HSAUR2_1.1-17            boot.heterogeneity_0.1.0</span></a>
-<a class="sourceLine" id="cb24-19" data-line-number="19"><span class="co">#&gt; </span></a>
-<a class="sourceLine" id="cb24-20" data-line-number="20"><span class="co">#&gt; loaded via a namespace (and not attached):</span></a>
-<a class="sourceLine" id="cb24-21" data-line-number="21"><span class="co">#&gt;  [1] Rcpp_1.0.4.6        compiler_3.6.3      prettyunits_1.1.1  </span></a>
-<a class="sourceLine" id="cb24-22" data-line-number="22"><span class="co">#&gt;  [4] remotes_2.1.1       testthat_2.3.2.9000 digest_0.6.25      </span></a>
-<a class="sourceLine" id="cb24-23" data-line-number="23"><span class="co">#&gt;  [7] pkgbuild_1.0.6      pkgload_1.0.2       evaluate_0.14      </span></a>
-<a class="sourceLine" id="cb24-24" data-line-number="24"><span class="co">#&gt; [10] nlme_3.1-147        lattice_0.20-41     memoise_1.1.0      </span></a>
-<a class="sourceLine" id="cb24-25" data-line-number="25"><span class="co">#&gt; [13] rlang_0.4.5         Matrix_1.2-18       cli_2.0.2          </span></a>
-<a class="sourceLine" id="cb24-26" data-line-number="26"><span class="co">#&gt; [16] rstudioapi_0.11     yaml_2.2.1          parallel_3.6.3     </span></a>
-<a class="sourceLine" id="cb24-27" data-line-number="27"><span class="co">#&gt; [19] xfun_0.13           withr_2.1.2         metafor_2.4-0      </span></a>
-<a class="sourceLine" id="cb24-28" data-line-number="28"><span class="co">#&gt; [22] stringr_1.4.0       roxygen2_7.1.0      knitr_1.28         </span></a>
-<a class="sourceLine" id="cb24-29" data-line-number="29"><span class="co">#&gt; [25] xml2_1.3.1          desc_1.2.0          fs_1.4.1           </span></a>
-<a class="sourceLine" id="cb24-30" data-line-number="30"><span class="co">#&gt; [28] devtools_2.3.0      rprojroot_1.3-2     grid_3.6.3         </span></a>
-<a class="sourceLine" id="cb24-31" data-line-number="31"><span class="co">#&gt; [31] glue_1.4.0          R6_2.4.1            processx_3.4.2     </span></a>
-<a class="sourceLine" id="cb24-32" data-line-number="32"><span class="co">#&gt; [34] pbmcapply_1.5.0     fansi_0.4.1         rmarkdown_2.1      </span></a>
-<a class="sourceLine" id="cb24-33" data-line-number="33"><span class="co">#&gt; [37] sessioninfo_1.1.1   callr_3.4.3         purrr_0.3.3        </span></a>
-<a class="sourceLine" id="cb24-34" data-line-number="34"><span class="co">#&gt; [40] magrittr_1.5        htmltools_0.4.0     backports_1.1.6    </span></a>
-<a class="sourceLine" id="cb24-35" data-line-number="35"><span class="co">#&gt; [43] ps_1.3.2            ellipsis_0.3.0      usethis_1.6.0      </span></a>
-<a class="sourceLine" id="cb24-36" data-line-number="36"><span class="co">#&gt; [46] assertthat_0.2.1    stringi_1.4.6       crayon_1.3.4</span></a></code></pre></div>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1"></a><span class="kw">sessionInfo</span>()</span>
+<span id="cb24-2"><a href="#cb24-2"></a><span class="co">#&gt; R version 4.0.2 (2020-06-22)</span></span>
+<span id="cb24-3"><a href="#cb24-3"></a><span class="co">#&gt; Platform: x86_64-apple-darwin17.0 (64-bit)</span></span>
+<span id="cb24-4"><a href="#cb24-4"></a><span class="co">#&gt; Running under: macOS Catalina 10.15.6</span></span>
+<span id="cb24-5"><a href="#cb24-5"></a><span class="co">#&gt; </span></span>
+<span id="cb24-6"><a href="#cb24-6"></a><span class="co">#&gt; Matrix products: default</span></span>
+<span id="cb24-7"><a href="#cb24-7"></a><span class="co">#&gt; BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib</span></span>
+<span id="cb24-8"><a href="#cb24-8"></a><span class="co">#&gt; LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib</span></span>
+<span id="cb24-9"><a href="#cb24-9"></a><span class="co">#&gt; </span></span>
+<span id="cb24-10"><a href="#cb24-10"></a><span class="co">#&gt; locale:</span></span>
+<span id="cb24-11"><a href="#cb24-11"></a><span class="co">#&gt; [1] C/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8</span></span>
+<span id="cb24-12"><a href="#cb24-12"></a><span class="co">#&gt; </span></span>
+<span id="cb24-13"><a href="#cb24-13"></a><span class="co">#&gt; attached base packages:</span></span>
+<span id="cb24-14"><a href="#cb24-14"></a><span class="co">#&gt; [1] tools     stats     graphics  grDevices utils     datasets  methods  </span></span>
+<span id="cb24-15"><a href="#cb24-15"></a><span class="co">#&gt; [8] base     </span></span>
+<span id="cb24-16"><a href="#cb24-16"></a><span class="co">#&gt; </span></span>
+<span id="cb24-17"><a href="#cb24-17"></a><span class="co">#&gt; other attached packages:</span></span>
+<span id="cb24-18"><a href="#cb24-18"></a><span class="co">#&gt; [1] HSAUR3_1.0-9             boot.heterogeneity_0.1.0</span></span>
+<span id="cb24-19"><a href="#cb24-19"></a><span class="co">#&gt; </span></span>
+<span id="cb24-20"><a href="#cb24-20"></a><span class="co">#&gt; loaded via a namespace (and not attached):</span></span>
+<span id="cb24-21"><a href="#cb24-21"></a><span class="co">#&gt;  [1] Rcpp_1.0.5        compiler_4.0.2    prettyunits_1.1.1 remotes_2.2.0    </span></span>
+<span id="cb24-22"><a href="#cb24-22"></a><span class="co">#&gt;  [5] testthat_2.3.2    digest_0.6.25     pkgbuild_1.1.0    pkgload_1.1.0    </span></span>
+<span id="cb24-23"><a href="#cb24-23"></a><span class="co">#&gt;  [9] evaluate_0.14     nlme_3.1-148      lattice_0.20-41   memoise_1.1.0    </span></span>
+<span id="cb24-24"><a href="#cb24-24"></a><span class="co">#&gt; [13] rlang_0.4.7       Matrix_1.2-18     cli_2.0.2         rstudioapi_0.11  </span></span>
+<span id="cb24-25"><a href="#cb24-25"></a><span class="co">#&gt; [17] yaml_2.2.1        parallel_4.0.2    xfun_0.16         withr_2.2.0      </span></span>
+<span id="cb24-26"><a href="#cb24-26"></a><span class="co">#&gt; [21] metafor_2.4-0     stringr_1.4.0     roxygen2_7.1.1    knitr_1.29       </span></span>
+<span id="cb24-27"><a href="#cb24-27"></a><span class="co">#&gt; [25] xml2_1.3.2        desc_1.2.0        fs_1.5.0          devtools_2.3.1   </span></span>
+<span id="cb24-28"><a href="#cb24-28"></a><span class="co">#&gt; [29] rprojroot_1.3-2   grid_4.0.2        glue_1.4.1        R6_2.4.1         </span></span>
+<span id="cb24-29"><a href="#cb24-29"></a><span class="co">#&gt; [33] processx_3.4.3    pbmcapply_1.5.0   fansi_0.4.1       rmarkdown_2.3    </span></span>
+<span id="cb24-30"><a href="#cb24-30"></a><span class="co">#&gt; [37] sessioninfo_1.1.1 callr_3.4.3       purrr_0.3.4       magrittr_1.5     </span></span>
+<span id="cb24-31"><a href="#cb24-31"></a><span class="co">#&gt; [41] htmltools_0.5.0   backports_1.1.9   ps_1.3.4          ellipsis_0.3.1   </span></span>
+<span id="cb24-32"><a href="#cb24-32"></a><span class="co">#&gt; [45] usethis_1.6.1     assertthat_0.2.1  stringi_1.4.6     crayon_1.3.4</span></span></code></pre></div>
 </div>
 </div>
 

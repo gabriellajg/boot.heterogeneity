@@ -14,7 +14,7 @@
 #' @param n_11 a vector of number of participants who score positively on both Y1 and Y2 (e.g., recovery cases in the experimental group).
 #' @param lnOR a vector of natural-logarithm-transformed odds ratio in the included studies, which is calculated as ln(n11*n00/n01/n10)
 #' @param model choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.
-#' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor]{rma}} for more details.
+#' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.
 #' @param nrep number of replications used in bootstrap simulations. Default to 10^4.
 #' @param p_cut cutoff for p-values, which is the alpha level. Default to 0.05.
 #' @param boot.include if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).
@@ -35,7 +35,7 @@
 #'
 #' @examples
 #' # A meta-analysis consists of 26 studies on nicotine replacement therapy for smoking cessation
-#' library(HSAUR2)
+#' library(HSAUR3)
 #' data(smoking)
 #'
 #' # Y1: receive treatment; Y2: stop smoking
@@ -48,8 +48,6 @@
 #' \dontrun{
 #' boot.run <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05)
 #' }
-#' # Note: this boot.lnOR function is supposed to replace
-#' # its earlier version in \link[mc.heterogeneity]{mc.lnOR}.
 #' @export
 
 boot.lnOR <- function(n_00, n_01, n_10, n_11, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = FALSE, verbose = FALSE) {
