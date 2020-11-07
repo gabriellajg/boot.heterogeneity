@@ -6,7 +6,7 @@
 <!-- badges: start -->
 
 [![Travis build
-status](https://travis-ci.org/gabriellajg/boot.heterogeneity.svg?branch=master)](https://travis-ci.org/gabriellajg/boot.heterogeneity)
+status](https://travis-ci.org/gabriellajg/boot.heterogeneity.svg?branch=master)](https://travis-ci.org/gabriellajg/boot.heterogeneity) [![](http://cranlogs.r-pkg.org/badges/grand-total/boot.heterogeneity)](https://CRAN.R-project.org/package=boot.heterogeneity)
 <!-- badges: end -->
 
 The package boot.heterogeneity implements a Bootstrap-Based
