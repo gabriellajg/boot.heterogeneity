@@ -4,16 +4,13 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ----setup, eval = FALSE------------------------------------------------------
-#  install.packages("boot.heterogeneity")
-
 ## ----github, eval = FALSE-----------------------------------------------------
 #  #install.packages("devtools")
 #  library(devtools)
 #  devtools::install_github("gabriellajg/boot.heterogeneity", force = TRUE, build_vignettes = TRUE)
 #  library(boot.heterogeneity)
 
-## ---- echo=FALSE--------------------------------------------------------------
+## -----------------------------------------------------------------------------
 library("boot.heterogeneity")
 
 ## -----------------------------------------------------------------------------
@@ -43,14 +40,12 @@ d <- cm*g
 #  boot.run
 #  #>                  stat  p_value Heterogeneity
 #  #> Qtest       23.391659 0.136929           n.s
-#  #> boot.Qtest  23.391659 0.127800           n.s
 #  #> boot.REML    2.037578 0.053100           n.s
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  boot.run2
 #  #>                  stat  p_value Heterogeneity
 #  #> Qtest       23.391659 0.136929           n.s
-#  #> boot.Qtest  23.391659 0.127800           n.s
 #  #> boot.REML    2.037578 0.053100           n.s
 
 ## -----------------------------------------------------------------------------
@@ -71,7 +66,6 @@ head(hypo_moder)
 #  boot.run3
 #  #>                  stat    p_value  Heterogeneity
 #  #> Qtest       31.849952  0.000806             sig
-#  #> boot.Qtest  31.849952  0.000600             sig
 #  #> boot.REML    9.283428  0.000400             sig
 
 ## -----------------------------------------------------------------------------
@@ -92,7 +86,6 @@ z <- 1/2*log((1+r)/(1-r))
 #  boot.run.cor
 #  #>                  stat    p_value    Heterogeneity
 #  #> Qtest       29.060970  0.00385868             sig
-#  #> boot.Qtest  29.060970  0.00240072             sig
 #  #> boot.REML    6.133111  0.00400882             sig
 
 ## -----------------------------------------------------------------------------
@@ -117,7 +110,6 @@ lnOR
 #  boot.run.lnOR
 #  #>                  stat    p_value    Heterogeneity
 #  #> Qtest       34.873957  0.09050857             n.s
-#  #> boot.Qtest  34.873957  0.08826793             n.s
 #  #> boot.REML    3.071329  0.03706729             sig
 
 ## -----------------------------------------------------------------------------

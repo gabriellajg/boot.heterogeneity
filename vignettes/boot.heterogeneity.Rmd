@@ -1,6 +1,6 @@
 ---
 title: "A Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Meta-Analysis"
-output: rmarkdown::html_vignette
+output: pdf_document
 vignette: >
   %\VignetteIndexEntry{boot.heterogeneity}
   %\VignetteEngine{knitr::rmarkdown}
@@ -33,13 +33,7 @@ Inclusion of moderators is an option for researchers who are interested in measu
 
 ## 0. Installation of the package
 
-Install the released version of boot.heterogeneity from [CRAN](https://cran.r-project.org/package=mc.heterogeneity) with:
-
-```{r setup, eval = FALSE}
-install.packages("boot.heterogeneity")
-```
-
-Or install the development version from [GitHub](https://github.com/gabriellajg/boot.heterogeneity) with:
+For most recent updates, researchers are highly recommended to install the development version of this package from [GitHub](https://github.com/gabriellajg/boot.heterogeneity) using the following syntax:
 
 ```{r github, eval = FALSE}
 #install.packages("devtools")
@@ -48,7 +42,11 @@ devtools::install_github("gabriellajg/boot.heterogeneity", force = TRUE, build_v
 library(boot.heterogeneity)
 ```
 
-```{r, echo=FALSE}
+The newest version of this package will also be available from [CRAN](https://cran.r-project.org/package=mc.heterogeneity) shortly.
+
+Load the library in R:
+
+```{r}
 library("boot.heterogeneity")
 ```
 
@@ -104,7 +102,6 @@ boot.run2 <- boot.d(n1, n2, est = g, model = 'random', adjust = TRUE, p_cut = 0.
 boot.run
 #>                  stat  p_value Heterogeneity
 #> Qtest       23.391659 0.136929           n.s
-#> boot.Qtest  23.391659 0.127800           n.s
 #> boot.REML    2.037578 0.053100           n.s
 ```
 
@@ -112,15 +109,11 @@ boot.run
 boot.run2
 #>                  stat  p_value Heterogeneity
 #> Qtest       23.391659 0.136929           n.s
-#> boot.Qtest  23.391659 0.127800           n.s
 #> boot.REML    2.037578 0.053100           n.s
 ```
 
 * The first line presents the results of Q-test of a random-effects model. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level (i.e., nominal alpha level) of either 0.05 or 0.1, this statistic is n.s (not significant). The homogeneity assumption is not rejected. 
-
-* The second line presents the results of bootstrap-based Q test. The Q-statistic is still 23.39 but the bootstrap-based p-value is 0.128. This statistic is n.s (not significant) and the assumption of homogeneity is not rejected with an alpha level of 0.05. 
-
-* The third line presents the results of MC-REML-LRT. The REML-LRT statistic is 2.04 and the bootstrap-based p-value is 0.053. Similar to the results of MC-ML-LR, the assumption of homogeneity is not rejected with an alpha level of 0.05 but will be rejected at an alpha level of 0.1. 
+* The second line presents the results of MC-REML-LRT. The REML-LRT statistic is 2.04 and the bootstrap-based p-value is 0.053. The assumption of homogeneity is not rejected with an alpha level of 0.05 but will be rejected at an alpha level of 0.1. 
 
 
 ### 1.2 With moderators
@@ -154,7 +147,6 @@ The results in `boot.run3` will in the same format as `boot.run` and `boot.run2`
 boot.run3
 #>                  stat    p_value  Heterogeneity
 #> Qtest       31.849952  0.000806             sig
-#> boot.Qtest  31.849952  0.000600             sig
 #> boot.REML    9.283428  0.000400             sig
 ```
 
@@ -162,9 +154,7 @@ In the presence of moderators, the function above tests whether the variability 
 
 * In the first line, the Q-statistic is Q(df = 11) = 31.85 and the associated p-value is 0.0008. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes after accounting for the moderators are heterogeneous. 
 
-* In the second line, the Q-statistic is still 31.85 but the bootstrap-based p-value is 0.0006. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
-
-* In the third line, the REML-LRT statistic is 9.28 and the bootstrap-based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
+* In the second line, the REML-LRT statistic is 9.28 and the bootstrap-based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
 
 #### For the following two examples (Fisher-transformed Pearson's correlations r; Natural-logarithm-transformed odds ratio OR), no moderators are included, but one can simply include moderators as in section 1.2. 
 
@@ -201,15 +191,12 @@ The test of between-study heterogeneity has the following results:
 boot.run.cor
 #>                  stat    p_value    Heterogeneity
 #> Qtest       29.060970  0.00385868             sig
-#> boot.Qtest  29.060970  0.00240072             sig
 #> boot.REML    6.133111  0.00400882             sig
 ```
 
 * In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes are heterogeneous. 
 
-* In the second line, the Q-statistic is still 29.06 but the bootstrap-based p-value is 0.0024. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.  
-
-* In the third line, the REML-LRT statistic is 6.13 and the bootstrap-based p-value is 0.004. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.
+* In the second line, the REML-LRT statistic is 6.13 and the bootstrap-based p-value is 0.004. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.
 
 
 ### 3. Natural-logarithm-transformed odds ratio (OR)
@@ -252,15 +239,12 @@ The test of between-study heterogeneity has the following results:
 boot.run.lnOR
 #>                  stat    p_value    Heterogeneity
 #> Qtest       34.873957  0.09050857             n.s
-#> boot.Qtest  34.873957  0.08826793             n.s
 #> boot.REML    3.071329  0.03706729             sig
 ```
 
 * In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected. 
 
-* In the second line, the Q-statistic is still 34.87 but the bootstrap-based p-value is 0.088. This means that the assumption of homogeneity marginally significant but not rejected at an alpha level of 0.05. 
-
-* In the third line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.
+* In the second line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.
 
 ```{r}
 sessionInfo()

@@ -7,6 +7,7 @@
 boot.fcor(
   n,
   z,
+  ttau = 0,
   model = "random",
   mods = NULL,
   nrep = 10^4,
@@ -20,6 +21,8 @@ boot.fcor(
 \item{n}{a vector of sample sizes in each of the included studies.}
 
 \item{z}{a vector of Fisher-transformed Pearson's correlations.}
+
+\item{ttau}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 

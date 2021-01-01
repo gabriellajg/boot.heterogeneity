@@ -8,6 +8,7 @@
 #'
 #' @param n a vector of sample sizes in each of the included studies.
 #' @param z a vector of Fisher-transformed Pearson's correlations.
+#' @param ttau size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.
 #' @param model choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.
 #' @param mods optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.
 #' @param nrep number of replications used in bootstrap simulations. Default to 10^4.
@@ -22,6 +23,9 @@
 #' @importFrom metafor fitstats
 #' @importFrom pbmcapply pbmclapply
 #' @importFrom stats runif
+#' @importFrom stats rnorm
+#' @importFrom stats na.omit
+#' @importFrom stats ecdf
 #'
 #' @references Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation seeking. New York, NY: Cambridge University Press.
 #' @references Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
@@ -46,7 +50,7 @@
 #' }
 #' @export
 
-boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = FALSE, verbose = FALSE) {
+boot.fcor <- function(n, z, ttau = 0, model = 'random', mods = NULL, nrep = 10^4, p_cut = 0.05, boot.include = FALSE, parallel = FALSE, verbose = FALSE) {
 
   #########################################################################
   if (!model %in% c('random', 'mixed')){
@@ -62,8 +66,8 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   #########################################################################
   vi<-1/(n-3)
 
-  model.f1<-try(metafor::rma(z, vi, mods = mods, tau2=0, method="ML"))
-  model.f2<-try(metafor::rma(z, vi, mods = mods, tau2=0, method="REML"))
+  model.f1<-try(metafor::rma(z, vi, mods = mods, tau2=ttau^2, method="ML")) ####NEW!!!!
+  model.f2<-try(metafor::rma(z, vi, mods = mods, tau2=ttau^2, method="REML")) ####NEW!!!!
   model.r1<-try(metafor::rma(z, vi, mods = mods, method="ML"))
   model.r2<-try(metafor::rma(z, vi, mods = mods, method="REML"))
 
@@ -71,12 +75,13 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
 
   bs <- model.r2$beta[,1]
   z_overall <- apply(cbind(1, mods), 1, function(x) sum(bs*x))
-  #get predicted effect size for each study #for w/ and w/o moderators
+
+  #get predicted effect size for each study #w/ and w/o moderators
 
   if(verbose){cat("Bootstrapping... \n")}
 
   if(parallel){
-    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, z_overall=z_overall, vi=vi, n=n, mods=mods, mc.cores = 2))
+    find.c <- do.call(cbind, pbmcapply::pbmclapply(1:nrep, simulate.z, z_overall=z_overall, ttau=ttau, vi=vi, n=n, mods=mods, mc.cores = 12))
     # parallel::detectCores()-1)
   } else {
     find.c <- matrix(NA, 3, nrep)
@@ -84,7 +89,7 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
     for(i in 1:nrep){
       Sys.sleep(0.01)
       utils::setTxtProgressBar(pb, i)
-      find.c[,i] = simulate.z(i, z_overall, vi, n, mods)
+      find.c[,i] = simulate.z(i, z_overall, ttau, vi, n, mods)
     }
   }
   err.catcher <- sum(colSums(is.na(find.c))!=0)/nrep
@@ -92,36 +97,50 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
     warning("Noncovergence rate in simulations is larger than 5%!")
   }
 
-  ML.sim <- stats::na.omit(unlist(find.c)[ c(TRUE,FALSE,FALSE) ])
-  REML.sim <- stats::na.omit(unlist(find.c)[ c(FALSE,TRUE,FALSE) ])
-  chisq.sim <- stats::na.omit(unlist(find.c)[ c(FALSE,FALSE,TRUE) ])
-  ML.c<-stats::quantile(ML.sim, 0.95)
-  REML.c<-stats::quantile(REML.sim, 0.95)
-  chisq.c<-stats::quantile(chisq.sim, 0.95)
+  # We recommend B-REML-LR
+  # p-value
+  if (model.r1$tau2>=(ttau^2)){
+    # One-sided test so the estimated tau has to be larger than lambda,
+    # otherwise, we fail to reject the null hypothesis.
+    f <- ecdf(na.omit(unlist(find.c)[ c(FALSE,TRUE,FALSE) ]))
+    pvalue=1-f( (fitstats(model.r2)-fitstats( model.f2))[1]*2)
+    # Ge's way to calculate p-value (it's the same)
+    ML.sim <- stats::na.omit(unlist(find.c)[ c(TRUE,FALSE,FALSE) ])
+    REML.sim <- stats::na.omit(unlist(find.c)[ c(FALSE,TRUE,FALSE) ])
+    chisq.sim <- stats::na.omit(unlist(find.c)[ c(FALSE,FALSE,TRUE) ])
+    ML.c<-stats::quantile(ML.sim, 0.95)
+    REML.c<-stats::quantile(REML.sim, 0.95)
+    chisq.c<-stats::quantile(chisq.sim, 0.95)
 
-  if (sum(!class(model.r1)!="try-error" , !class(model.f1)!="try-error")==0){
-    lllr1<-(metafor::fitstats(model.r1)-metafor::fitstats(model.f1))[1]*2
-    p_lr1<-sum(ML.sim>=lllr1)/length(ML.sim)
-    p_lr1.a <-sum(ML.sim>=2.71)/length(ML.sim)
-    p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)
-    res_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
-    res_bootQ<-ifelse(model.f1$QE>=chisq.c, 'sig', 'n.s')
+    if (sum(!class(model.r1)!="try-error" , !class(model.f1)!="try-error")==0){
+      lllr1<-(metafor::fitstats(model.r1)-metafor::fitstats(model.f1))[1]*2
+      p_lr1<-sum(ML.sim>=lllr1)/length(ML.sim)
+      p_lr1.a <-sum(ML.sim>=2.71)/length(ML.sim)
+      p_Q <- sum(chisq.sim>=model.f1$QE)/length(chisq.sim)
+      res_lr1<-ifelse(lllr1>ML.c, 'sig', 'n.s')
+      res_bootQ<-ifelse(model.f1$QE>=chisq.c, 'sig', 'n.s')
+    } else {
+      lllr1<-NA; p_lr1<-NA; res_lr1<-NA; p_lr1.a<-NA; p_Q<-NA;
+    }
+
+    if (sum(!class(model.r2)!="try-error" , !class(model.f2)!="try-error")==0){
+      lllr2<-(metafor::fitstats(model.r2)-metafor::fitstats(model.f2))[1]*2
+      p_lr2<-sum(REML.sim>=lllr2)/length(REML.sim)
+      p_lr2.a <-sum(REML.sim>=2.71)/length(REML.sim)
+      res_lr2<-ifelse(lllr2>REML.c, 'sig', 'n.s')
+    } else {
+      lllr2<-NA; p_lr2<-NA; res_lr2<-NA; p_lr2.a<-NA
+    }
+
+    Q <- model.f1$QE
+    Qp <- model.r2$QEp
+    Qres<-ifelse(Qp<= p_cut, 'sig', 'n.s') ### vary the size
   } else {
-    lllr1<-NA; p_lr1<-NA; res_lr1<-NA; p_lr1.a<-NA; p_Q<-NA;
-  }
+    pvalue=NA
+    warning("pvalue=NA and we fail to reject the null hypothesis.")
+    #We don't calculate pvalue in this case and just say that we fail to reject the null hypothesis.
+    }
 
-  if (sum(!class(model.r2)!="try-error" , !class(model.f2)!="try-error")==0){
-    lllr2<-(metafor::fitstats(model.r2)-metafor::fitstats(model.f2))[1]*2
-    p_lr2<-sum(REML.sim>=lllr2)/length(REML.sim)
-    p_lr2.a <-sum(REML.sim>=2.71)/length(REML.sim)
-    res_lr2<-ifelse(lllr2>REML.c, 'sig', 'n.s')
-  } else {
-    lllr2<-NA; p_lr2<-NA; res_lr2<-NA; p_lr2.a<-NA
-  }
-
-  Q <- model.f1$QE
-  Qp <- model.r2$QEp
-  Qres<-ifelse(Qp<= p_cut, 'sig', 'n.s') ### vary the size
   } else {
     Q<-NA
     Qp<-NA
@@ -143,8 +162,8 @@ boot.fcor <- function(n, z, model = 'random', mods = NULL, nrep = 10^4, p_cut = 
   #out <- data.frame(stat = c(Q, Q, lllr1, lllr2), p_value = c(Qp, p_Q, p_lr1, p_lr2), Heterogeneity = c(Qres, res_bootQ, res_lr1, res_lr2))
   #rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.ML', 'boot.REML')
 
-  out <- data.frame(stat = c(Q, Q, lllr2), p_value = c(Qp, p_Q, p_lr2), Heterogeneity = c(Qres, res_bootQ, res_lr2))
-  rownames(out) <- c('Qtest', 'boot.Qtest', 'boot.REML')
+  out <- data.frame(stat = c(Q, lllr2), p_value = c(Qp, p_lr2), Heterogeneity = c(Qres, res_lr2))
+  rownames(out) <- c('Qtest', 'boot.REML')
 
   if(boot.include){
     out <- list(results = out, find.c = find.c, ML.sim = ML.sim, REML.sim = REML.sim, chisq.sim = chisq.sim)

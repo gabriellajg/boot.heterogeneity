@@ -12,7 +12,7 @@ test_that("boot.d", {
   boot.run30 <- boot.d(n1, n2, est = d, nrep = 30)
 
   expect_error(boot.d(n1, n2, est = d, model = 'cc', nrep = 30), "The meta-analytical model must be either random- or mixed- effects model!")
-  expect_equal(round(boot.run30[3,2], 2), 0.1)
+  expect_equal(round(boot.run30[2,2], 2), 0.1)
 })
 
 
@@ -24,7 +24,7 @@ test_that("boot.fcor", {
   boot.run.cor30 <- boot.fcor(n, z, nrep = 30)
 
   expect_error(boot.fcor(n, z, model = 'cc', nrep = 30), "The meta-analytical model must be either random- or mixed- effects model!")
-  expect_equal(round(boot.run.cor30[3,2], 2), 0)
+  expect_equal(round(boot.run.cor30[2,2], 2), 0)
 })
 
 
@@ -39,7 +39,7 @@ test_that("boot.lnOR", {
   boot.run.lnOR30 <- boot.lnOR(n_00, n_01, n_10, n_11, nrep = 30)
 
   expect_error(boot.lnOR(n_00, n_01, n_10, n_11, model = 'cc', nrep = 30), "The meta-analytical model must be either random- or mixed- effects model!")
-  expect_equal(round(boot.run.lnOR30[3,2], 2), 0.03)
+  expect_equal(round(boot.run.lnOR30[2,2], 2), 0.03)
 })
 
 

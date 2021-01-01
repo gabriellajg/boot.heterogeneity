@@ -12,6 +12,7 @@ boot.lnOR(
   n_01,
   n_10,
   n_11,
+  ttau = 0,
   model = "random",
   mods = NULL,
   nrep = 10^4,
@@ -29,6 +30,8 @@ boot.lnOR(
 \item{n_10}{a vector of number of participants who score positively on Y1 and negatively on Y2 (e.g., mortality cases in the experimental group).}
 
 \item{n_11}{a vector of number of participants who score positively on both Y1 and Y2 (e.g., recovery cases in the experimental group).}
+
+\item{ttau}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 

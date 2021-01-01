@@ -1,7 +1,7 @@
 Package: boot.heterogeneity
 Type: Package
 Title: A Bootstrap-Based Heterogeneity Test for Meta-Analysis
-Version: 0.1.1
+Version: 0.1.2
 Authors@R: c(person("Ge", "Jiang", role = c("aut", "cre"),
                      email = "gejiang2@illinois.edu"),
               person("Han", "Du", role = "aut", email = "hdu@psych.ucla.edu"),

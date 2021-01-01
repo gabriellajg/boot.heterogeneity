@@ -8,6 +8,7 @@ boot.d(
   n1,
   n2,
   est,
+  ttau = 0,
   model = "random",
   adjust = FALSE,
   mods = NULL,
@@ -24,6 +25,8 @@ boot.d(
 \item{n2}{a vector of sample sizes from group 2 in each of the included studies.}
 
 \item{est}{a vector of unbiased estimates of standardized mean differences.}
+
+\item{ttau}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 
