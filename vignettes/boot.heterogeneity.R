@@ -5,13 +5,20 @@ knitr::opts_chunk$set(
 )
 
 ## ----github, eval = FALSE-----------------------------------------------------
-#  #install.packages("devtools")
+#  # install.packages("devtools")
 #  library(devtools)
-#  devtools::install_github("gabriellajg/boot.heterogeneity", force = TRUE, build_vignettes = TRUE)
+#  devtools::install_github("gabriellajg/boot.heterogeneity",
+#                           force = TRUE,
+#                           build_vignettes = TRUE,
+#                           dependencies = TRUE)
 #  library(boot.heterogeneity)
 
 ## -----------------------------------------------------------------------------
-library("boot.heterogeneity")
+library(metafor) # for Q-test
+library(pbmcapply) # optional - for parallel implementation of bootstrapping
+library(HSAUR3) # for an example dataset in the tutorial
+library(knitr) # for knitting the tutorial
+library(rmarkdown) # for knitting the tutorial
 
 ## -----------------------------------------------------------------------------
 selfconcept <- boot.heterogeneity:::selfconcept
@@ -84,9 +91,17 @@ z <- 1/2*log((1+r)/(1-r))
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  boot.run.cor
-#  #>                  stat    p_value    Heterogeneity
-#  #> Qtest       29.060970  0.00385868             sig
-#  #> boot.REML    6.133111  0.00400882             sig
+#  #>                  stat      p_value    Heterogeneity
+#  #> Qtest       29.060970    0.00385868             sig
+#  #> boot.REML    6.133111    0.00400882             sig
+
+## ---- eval=FALSE, results = 'hide'--------------------------------------------
+#  boot.run.cor2 <- boot.fcor(n, z, lambda=0.08, model = 'random', p_cut = 0.05)
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  boot.run.cor2
+#  #>                  stat      p_value    Heterogeneity
+#  #> boot.REML     2.42325   0.04607372              sig
 
 ## -----------------------------------------------------------------------------
 library(HSAUR3)
@@ -108,6 +123,17 @@ lnOR
 
 ## ---- eval=FALSE--------------------------------------------------------------
 #  boot.run.lnOR
+#  #>                  stat    p_value    Heterogeneity
+#  #> Qtest       34.873957  0.09050857             n.s
+#  #> boot.REML    3.071329  0.03706729             sig
+
+## ---- eval=FALSE, results = 'hide'--------------------------------------------
+#  boot.run.lnOR2 <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05,
+#                              parallel = TRUE, cores = 4)
+
+## ---- eval=FALSE--------------------------------------------------------------
+#  boot.run.lnOR2
+#  #|=====================================================| 100%, Elapsed 00:41
 #  #>                  stat    p_value    Heterogeneity
 #  #> Qtest       34.873957  0.09050857             n.s
 #  #> boot.REML    3.071329  0.03706729             sig

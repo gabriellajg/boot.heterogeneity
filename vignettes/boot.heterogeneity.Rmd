@@ -1,6 +1,8 @@
 ---
 title: "A Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Meta-Analysis"
-output: pdf_document
+output: 
+  #pdf_document
+  html_document 
 vignette: >
   %\VignetteIndexEntry{boot.heterogeneity}
   %\VignetteEngine{knitr::rmarkdown}
@@ -17,44 +19,69 @@ knitr::opts_chunk$set(
 
 ###### 
 
-This R package boot.heterogeneity provides functions for testing between-study heterogeneity in meta-analysis of standardized mean differences (d), Fisher-transformed Pearson's correlations (r), and natural-logarithm-transformed odds ratio (OR). 
+This R package boot.heterogeneity provides functions for testing the between-study heterogeneity in meta-analysis of standardized mean differences (d), Fisher-transformed Pearson's correlations (r), and log odds ratio (OR). 
 
-In the following examples, we describe how to use our package boot.heterogeneity to test the between-study heterogeneity for each of the three effect sizes (d, r, OR). *Datasets*, *R codes*, and *Output* are provided for each example so that applied researchers can easily replicate the examples and modify the codes for their own datasets. 
+In the following three examples, we describe how to use our package boot.heterogeneity to test the between-study heterogeneity for each of the three effect sizes (d, r, OR). *Datasets*, *R codes*, and *Output* are provided so that applied researchers can easily replicate each example or modify the codes for their own datasets. 
 
-* The three example datasets are internal datasets in our package, and researchers can load the datasets using boot.heterogeneity:::[dataset name]. In each of the example datasets, the rows correspond to studies in meta-analysis, and the columns correspond to required input for that study, which includes, but is not limited to effect size, sample size(s), and moderators. 
+* The three example *datasets* are internal in our package, and researchers can load the datasets using boot.heterogeneity:::[dataset_name]. In each of the example datasets, the rows correspond to studies in meta-analysis, and the columns correspond to required input for that study, which includes, but is not limited to effect size, sample size(s), and moderators. 
 
-* The example R codes adopt the default value for some of the arguments (e.g., default nominal alpha level is 0.05). To change the defaults, use help() to see more details for each of the functions. 
+* The example *R codes* adopt the default value for some of the arguments (e.g., default nominal alpha level is 0.05). To change the defaults, use help() or ? to access the documentation page of each function (e.g., help(boot.run.cor)). 
 
-* The output are formatted to have the same layout across the examples. 
+* The *output* is formatted to have the same layout across the examples. 
+
+Inclusion of *moderators* is an option for researchers who are interested in measuring the size of the between-study heterogeneity and using factors to  explain the systematic between-study heterogeneity. To see how we include moderators, please go to section 1.2. 
+
+*Heterogeneity magnitude test* is a test in which the researchers can compare the magnitude of the between-study heterogeneity against a specific level. This specific level is denoted as lambda in our alternative hypothesis. To see how we test a specific lambda in the alternative hypothesis, please go to section 2.2. 
+
+*Parallel implementation* of the bootstrapping process can save us considerable amount of computing time, especially when the number of bootstrap replications is large. To see how we accelerate the bootstrapping process with parallel implementation and computing nodes, please go to section 3.2. 
 
 In the main text of the article, an "Empirical Illustration" section is included to discuss the three examples in more detail. 
 
-Inclusion of moderators is an option for researchers who are interested in measuring the between-study heterogeneity per se and exploring factors that can explain the systematic between-study heterogeneity. 
+## Outline
 
-## 0. Installation of the package
+* [0. Installation of the package](#section0)
+* [1. Standardized Mean Differences (d)](#section1)
+  -  [1.1 Without moderators](#section1.1)
+  -  [1.2 With moderators](#section1.2)
+* [2. Fisher-transformed Pearson's correlations (r)](#section2)
+  -  [2.1 Heterogeneity magnitude test: lambda=0](#section2.1)
+  -  [2.2 Heterogeneity magnitude test: lambda=0.08](#section2.2)
+* [3. Log odds ratio (OR)](#section3)
+  -  [3.1 Without parallel implementation](#section3.1)
+  -  [3.2 With parallel implementation](#section3.2)
+
+
+## 0. Installation of the package {#section0}
 
 For most recent updates, researchers are highly recommended to install the development version of this package from [GitHub](https://github.com/gabriellajg/boot.heterogeneity) using the following syntax:
 
 ```{r github, eval = FALSE}
-#install.packages("devtools")
+# install.packages("devtools")
 library(devtools)
-devtools::install_github("gabriellajg/boot.heterogeneity", force = TRUE, build_vignettes = TRUE)
+devtools::install_github("gabriellajg/boot.heterogeneity", 
+                         force = TRUE, 
+                         build_vignettes = TRUE, 
+                         dependencies = TRUE)
 library(boot.heterogeneity)
 ```
 
 The newest version of this package will also be available from [CRAN](https://cran.r-project.org/package=mc.heterogeneity) shortly.
 
-Load the library in R:
+Note that you'll need the following packages to install this package successfully: 
 
 ```{r}
-library("boot.heterogeneity")
+library(metafor) # for Q-test
+library(pbmcapply) # optional - for parallel implementation of bootstrapping
+library(HSAUR3) # for an example dataset in the tutorial
+library(knitr) # for knitting the tutorial
+library(rmarkdown) # for knitting the tutorial
 ```
 
-### 1. Standardized Mean Differences (d)
+### 1. Standardized Mean Differences (d) {#section1}
 
 `boot.d()` is the function to test the between-study heterogeneity in meta-analysis of standardized mean differences (d). 
 
-### 1.1 Without moderators
+### 1.1 Without moderators {#section1.1}
 
 Load the example dataset `selfconcept` first: 
 
@@ -113,10 +140,10 @@ boot.run2
 ```
 
 * The first line presents the results of Q-test of a random-effects model. The Q-statistic is Q(df = 17) = 23.39 and the associated p-value is 0.137. Using a cutoff alpha level (i.e., nominal alpha level) of either 0.05 or 0.1, this statistic is n.s (not significant). The homogeneity assumption is not rejected. 
-* The second line presents the results of MC-REML-LRT. The REML-LRT statistic is 2.04 and the bootstrap-based p-value is 0.053. The assumption of homogeneity is not rejected with an alpha level of 0.05 but will be rejected at an alpha level of 0.1. 
+* The second line presents the results of B-REML-LR. The B-REML-LRT statistic is 2.04 and the bootstrap-based p-value is 0.053. The assumption of homogeneity is not rejected with an alpha level of 0.05 but will be rejected at an alpha level of 0.1. 
 
 
-### 1.2 With moderators
+### 1.2 With moderators {#section1.2}
 
 Load an hypothetical dataset `hypo_moder` first: 
 
@@ -154,13 +181,15 @@ In the presence of moderators, the function above tests whether the variability 
 
 * In the first line, the Q-statistic is Q(df = 11) = 31.85 and the associated p-value is 0.0008. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes after accounting for the moderators are heterogeneous. 
 
-* In the second line, the REML-LRT statistic is 9.28 and the bootstrap-based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
+* In the second line, the B-REML-LR statistic is 9.28 and the bootstrap-based p-value is 0.0004. This means that the true effect sizes after accounting for the moderators are heterogeneous at an alpha level of 0.05. 
 
-#### For the following two examples (Fisher-transformed Pearson's correlations r; Natural-logarithm-transformed odds ratio OR), no moderators are included, but one can simply include moderators as in section 1.2. 
+#### For the following two examples (Fisher-transformed Pearson's correlations r; log odds ratio OR), no moderators are included, but one can simply include moderators as in section 1.2. 
 
-### 2. Fisher-transformed Pearson's correlations (r)
+### 2. Fisher-transformed Pearson's correlations (r) {#section2}
 
 `boot.fcor()` is the function to test the between-study heterogeneity in meta-analysis of Fisher-transformed Pearson's correlations (r). 
+
+### 2.1 Heterogeneity magnitude test: lambda=0 {#section2.1}
 
 Load the example dataset `sensation` first: 
 
@@ -189,17 +218,36 @@ The test of between-study heterogeneity has the following results:
 
 ```{r, eval=FALSE}
 boot.run.cor
-#>                  stat    p_value    Heterogeneity
-#> Qtest       29.060970  0.00385868             sig
-#> boot.REML    6.133111  0.00400882             sig
+#>                  stat      p_value    Heterogeneity
+#> Qtest       29.060970    0.00385868             sig
+#> boot.REML    6.133111    0.00400882             sig
 ```
 
 * In the first line, the Q-statistic is Q(df = 12) = 29.06 and the associated p-value is 0.004. This statistic is significant (sig) at an alpha level of 0.05, meaning that the true effect sizes are heterogeneous. 
 
-* In the second line, the REML-LRT statistic is 6.13 and the bootstrap-based p-value is 0.004. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.
+* In the second line, the B-REML-LR statistic is 6.13 and the bootstrap-based p-value is 0.004. This means that the true effect sizes are heterogeneous at an alpha level of 0.05.
 
+### 2.2 Heterogeneity magnitude test: lambda=0.08 {#section2.2}
 
-### 3. Natural-logarithm-transformed odds ratio (OR)
+Run the heterogeneity test using `boot.fcor()`:
+
+```{r, eval=FALSE, results = 'hide'}
+boot.run.cor2 <- boot.fcor(n, z, lambda=0.08, model = 'random', p_cut = 0.05)
+```
+
+The test of between-study heterogeneity has the following results:
+
+```{r, eval=FALSE}
+boot.run.cor2
+#>                  stat      p_value    Heterogeneity
+#> boot.REML     2.42325   0.04607372              sig
+```
+
+* When lambda=0.08, the alternative hypothesis is that the magnitude of the between-study heterogeneity is larger than 0.08. Here the B-REML-LR statistic is 2.42 and the bootstrap-based p-value is 0.046. The null hypothesis is rejected in favor of the alternative hypothesis. This means that the true effect sizes are heterogeneous and the magnitude of the between-study heterogeneity is significantly larger than 0.08 at an alpha level of 0.05.
+
+### 3. Log odds ratio (OR) {#section3}
+
+### 3.1 Without parallel implementation {#section3.1}
 
 `boot.lnOR()` is the function to test the between-study heterogeneity in meta-analysis of Natural-logarithm-transformed odds ratio (OR). 
 
@@ -244,7 +292,27 @@ boot.run.lnOR
 
 * In the first line, the Q-statistic is Q(df = 25) = 34.87 and the associated p-value is 0.091. This statistic is not significant (n.s) at an alpha level of 0.05, meaning that the assumption of homogeneity cannot be rejected. 
 
-* In the second line, the REML-LRT statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.
+* In the second line, the B-REML-LR statistic is 3.07 and the bootstrap-based p-value is 0.037. This means that the assumption of homogeneity is rejected and the true effect sizes are heterogeneous at an alpha level of 0.05.
+
+### 3.2 With parallel implementation {#section3.2}
+
+Run the heterogeneity test using `boot.lnOR()` with parallel computing and 4 cores:
+
+```{r, eval=FALSE, results = 'hide'}
+boot.run.lnOR2 <- boot.lnOR(n_00, n_01, n_10, n_11, model = 'random', p_cut = 0.05, 
+                            parallel = TRUE, cores = 4)
+```
+
+The test of between-study heterogeneity has the same results as those in 3.1:
+
+```{r, eval=FALSE}
+boot.run.lnOR2
+#|=====================================================| 100%, Elapsed 00:41
+#>                  stat    p_value    Heterogeneity
+#> Qtest       34.873957  0.09050857             n.s
+#> boot.REML    3.071329  0.03706729             sig
+```
+
 
 ```{r}
 sessionInfo()
