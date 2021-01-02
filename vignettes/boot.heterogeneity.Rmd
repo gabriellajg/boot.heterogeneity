@@ -65,11 +65,11 @@ devtools::install_github("gabriellajg/boot.heterogeneity",
 library(boot.heterogeneity)
 ```
 
-The newest version of this package will also be available from [CRAN](https://cran.r-project.org/package=mc.heterogeneity) shortly.
+The newest version of this package will also be available on [CRAN](https://cran.r-project.org/package=mc.heterogeneity) shortly.
 
 Note that you'll need the following packages to install this package successfully: 
 
-```{r}
+```{r, eval=FALSE}
 library(metafor) # for Q-test
 library(pbmcapply) # optional - for parallel implementation of bootstrapping
 library(HSAUR3) # for an example dataset in the tutorial

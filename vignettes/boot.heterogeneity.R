@@ -13,12 +13,12 @@ knitr::opts_chunk$set(
 #                           dependencies = TRUE)
 #  library(boot.heterogeneity)
 
-## -----------------------------------------------------------------------------
-library(metafor) # for Q-test
-library(pbmcapply) # optional - for parallel implementation of bootstrapping
-library(HSAUR3) # for an example dataset in the tutorial
-library(knitr) # for knitting the tutorial
-library(rmarkdown) # for knitting the tutorial
+## ---- eval=FALSE--------------------------------------------------------------
+#  library(metafor) # for Q-test
+#  library(pbmcapply) # optional - for parallel implementation of bootstrapping
+#  library(HSAUR3) # for an example dataset in the tutorial
+#  library(knitr) # for knitting the tutorial
+#  library(rmarkdown) # for knitting the tutorial
 
 ## -----------------------------------------------------------------------------
 selfconcept <- boot.heterogeneity:::selfconcept
