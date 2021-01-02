@@ -2,13 +2,13 @@
 % Please edit documentation in R/boot.d.R
 \name{boot.d}
 \alias{boot.d}
-\title{Standardized Mean Differences (d): Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
+\title{Standardized Mean Differences (d): Bootstrap-based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \usage{
 boot.d(
   n1,
   n2,
   est,
-  ttau = 0,
+  lambda = 0,
   model = "random",
   adjust = FALSE,
   mods = NULL,
@@ -16,6 +16,7 @@ boot.d(
   p_cut = 0.05,
   boot.include = FALSE,
   parallel = FALSE,
+  cores = 4,
   verbose = FALSE
 )
 }
@@ -26,7 +27,7 @@ boot.d(
 
 \item{est}{a vector of unbiased estimates of standardized mean differences.}
 
-\item{ttau}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
+\item{lambda}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 
@@ -34,15 +35,17 @@ boot.d(
 
 \item{mods}{optional argument to include one or more moderators in the model. \code{mods} is NULL for random-effects model and a dataframe for mixed-effects model. A single moderator can be given as a vector of length \eqn{k} specifying the values of the moderator. Multiple moderators are specified by giving a matrix with \eqn{k} rows and as many columns as there are moderator variables. See \code{\link[metafor:rma.uni]{rma}} for more details.}
 
-\item{nrep}{number of replications used in bootstrap imulations. Default to 10^4.}
+\item{nrep}{number of replications used in bootstrap simulations. Default to 10^4.}
 
 \item{p_cut}{cutoff for p-values, which is the alpha level. Default to 0.05.}
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
-\item{parallel}{if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
+\item{parallel}{if true, parallel computing using 4 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
-\item{verbose}{if true, show the progress of boostrapping.}
+\item{cores}{the number of cores used in the parallel computing, Default to 4.}
+
+\item{verbose}{if true, show the progress of bootstrapping.}
 }
 \value{
 A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
@@ -53,7 +56,7 @@ A dataframe that contains the test statistics ('stat'), p-values ('p_value'), an
 \details{
 For standardized mean difference, if the biased estimates (i.e., g values) are provided, \code{adjust=TRUE} can be specified to obtain the corresponding unbiased estimates.
 
-This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Bootstrap-Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Bootstrap-Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
+This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Bootstrap-based Heterogeneity Test with Maximum Likelihood (ML), and (3) Bootstrap-based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero whereas "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }

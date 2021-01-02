@@ -2,18 +2,19 @@
 % Please edit documentation in R/boot.fcor.R
 \name{boot.fcor}
 \alias{boot.fcor}
-\title{Fisher-transformed Pearson's correlation: Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
+\title{Fisher-transformed Pearson's correlation: Bootstrap-based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \usage{
 boot.fcor(
   n,
   z,
-  ttau = 0,
+  lambda = 0,
   model = "random",
   mods = NULL,
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
   parallel = FALSE,
+  cores = 4,
   verbose = FALSE
 )
 }
@@ -22,7 +23,7 @@ boot.fcor(
 
 \item{z}{a vector of Fisher-transformed Pearson's correlations.}
 
-\item{ttau}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
+\item{lambda}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 
@@ -34,9 +35,11 @@ boot.fcor(
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
-\item{parallel}{if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
+\item{parallel}{if true, parallel computing using 4 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
-\item{verbose}{if true, show the progress of boostrapping.}
+\item{cores}{the number of cores used in the parallel computing, Default to 4.}
+
+\item{verbose}{if true, show the progress of bootstrapping.}
 }
 \value{
 A dataframe that contains the test statistics ('stat'), p-values ('p_value'), and significances of effect size heterogeneity ("Heterogeneity").
@@ -45,13 +48,13 @@ A dataframe that contains the test statistics ('stat'), p-values ('p_value'), an
 \code{boot.fcor} returns the bootstrap-based tests of the residual heterogeneity in random- or mixed- effects model of Pearson's correlation coefficients transformed with Fisher's r-to-z transformation (z scores).
 }
 \details{
-This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Bootstrap-Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Bootstrap-Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
+This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Bootstrap-based Heterogeneity Test with Maximum Likelihood (ML), and (3) Bootstrap-based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero whereas "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }
 \examples{
 # A meta-analysis of 13 studies studying the correlation
-# between sensation seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
+# between sensation-seeking scores and levels of monoamine oxidase (Zuckerman, 1994).
 
 sensation <- boot.heterogeneity:::sensation
 
@@ -69,7 +72,7 @@ z <- 1/2*log((1+r)/(1-r))
 }
 }
 \references{
-Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation seeking. New York, NY: Cambridge University Press.
+Zuckerman, M. (1994). Behavioral expressions and biosocial bases of sensation-seeking. New York, NY: Cambridge University Press.
 
 Viechtbauer, W. (2010). Conducting meta-analyses in R with the metafor package. Journal of Statistical Software, 36(3), 1-48. URL: http://www.jstatsoft.org/v36/i03/
 }

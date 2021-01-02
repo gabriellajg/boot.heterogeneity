@@ -2,7 +2,7 @@
 % Please edit documentation in R/boot.lnOR.R
 \name{boot.lnOR}
 \alias{boot.lnOR}
-\title{Natural-Logarithm-Transformed Odds Ratio (lnOR): Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
+\title{Natural-Logarithm-Transformed Odds Ratio (lnOR): Bootstrap-based Heterogeneity Test for Between-study Heterogeneity in Random- or Mixed- Effects Model}
 \source{
 Silagy  C, Lancaster  T, Stead  LF, Mant  D, Fowler  G. (2004). Nicotine replacement therapy for smoking cessation. Cochrane Database of Systematic Reviews 2004, Issue 3. Art. No.: CD000146. DOI: 10.1002/14651858.CD000146.pub2.
 }
@@ -12,13 +12,14 @@ boot.lnOR(
   n_01,
   n_10,
   n_11,
-  ttau = 0,
+  lambda = 0,
   model = "random",
   mods = NULL,
   nrep = 10^4,
   p_cut = 0.05,
   boot.include = FALSE,
   parallel = FALSE,
+  cores = 4,
   verbose = FALSE
 )
 }
@@ -31,7 +32,7 @@ boot.lnOR(
 
 \item{n_11}{a vector of number of participants who score positively on both Y1 and Y2 (e.g., recovery cases in the experimental group).}
 
-\item{ttau}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
+\item{lambda}{size of the magnitude to be tested in the alternative hypothesis of the heterogeneity magnitude test. Default to 0.}
 
 \item{model}{choice of random- or mixed- effects models. Can only be set to \code{"random"}, or \code{"mixed"}.}
 
@@ -43,9 +44,11 @@ boot.lnOR(
 
 \item{boot.include}{if true, bootstrap simulation results are included in the output (e.g., bootstrap critical values).}
 
-\item{parallel}{if true, parallel computing using 2 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
+\item{parallel}{if true, parallel computing using 4 cores will be performed during bootstrapping stage. Otherwise, for loop is used.}
 
-\item{verbose}{if true, show the progress of boostrapping.}
+\item{cores}{the number of cores used in the parallel computing, Default to 4.}
+
+\item{verbose}{if true, show the progress of bootstrapping.}
 
 \item{lnOR}{a vector of natural-logarithm-transformed odds ratio in the included studies, which is calculated as ln(n11*n00/n01/n10)}
 }
@@ -57,7 +60,7 @@ A dataframe that contains the test statistics ('stat'), p-values ('p_value'), an
 }
 \details{
 For odds ratio, its standard error will be infinite if any one of the four cells in the contingency tables is zero. In this case, Haldane and Anscombe correction is used by adding 0.5 to each cell value (Anscombe, 1956; Haldane, 1940).
-This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Bootstrap-Based Heterogeneity Test with Maximum Likelihood (ML), and (3) Bootstrap-Based Heterogeneity Test with Restricted Maximum Likelihood (REML).
+This function returns the test statistics as well as their p-value and significances using (1) Q-test, (2) Bootstrap-based Heterogeneity Test with Maximum Likelihood (ML), and (3) Bootstrap-based Heterogeneity Test with Restricted Maximum Likelihood (REML).
 
 The results of significances are classified as "sig" or "n.s" based on the cutoff p-value (i.e., alpha level). "sig" means that the between-study heterogeneity is significantly different from zero whereas "n.s" means the between-study heterogeneity is not significantly different from zero. The default alpha level is 0.05.
 }

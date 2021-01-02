@@ -15,13 +15,10 @@ URL: https://github.com/gabriellajg/boot.heterogeneity/
 BugReports: https://github.com/gabriellajg/boot.heterogeneity/issues
 RoxygenNote: 7.1.1
 Depends: R (>= 3.1.0)
-Imports: stats, metafor, utils, pbmcapply
+Imports: stats, metafor, utils, pbmcapply, HSAUR3, knitr, rmarkdown
 Suggests: 
     base,
-    HSAUR3,
     roxygen2,
     parallel, 
-    knitr,
-    rmarkdown,
     testthat
 VignetteBuilder: knitr
