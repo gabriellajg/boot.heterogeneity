@@ -29,7 +29,7 @@ In the following three examples, we describe how to use our package boot.heterog
 
 * The *output* is formatted to have the same layout across the examples. 
 
-Inclusion of *moderators* is an option for researchers who are interested in measuring the size of the between-study heterogeneity and using factors to  explain the systematic between-study heterogeneity. To see how we include moderators, please go to section 1.2. 
+Inclusion of *moderators* is an option for researchers who are interested in using factors to  explain the systematic between-study heterogeneity. To see how we include moderators, please go to section 1.2. 
 
 *Heterogeneity magnitude test* is a test in which the researchers can compare the magnitude of the between-study heterogeneity against a specific level. This specific level is denoted as lambda in our alternative hypothesis. To see how we test a specific lambda in the alternative hypothesis, please go to section 2.2. 
 
