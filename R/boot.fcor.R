@@ -67,10 +67,17 @@ boot.fcor <- function(n, z, lambda = 0, model = 'random', mods = NULL, nrep = 10
   #########################################################################
   vi<-1/(n-3)
 
-  model.f1<-try(metafor::rma(z, vi, mods = mods, tau2=lambda^2, method="ML")) ####NEW!!!!
-  model.f2<-try(metafor::rma(z, vi, mods = mods, tau2=lambda^2, method="REML")) ####NEW!!!!
-  model.r1<-try(metafor::rma(z, vi, mods = mods, method="ML"))
-  model.r2<-try(metafor::rma(z, vi, mods = mods, method="REML"))
+  if(is.null(mods)){
+    model.f1<-try(metafor::rma(z, vi, tau2=lambda^2, method="ML")) ####NEW!!!!
+    model.f2<-try(metafor::rma(z, vi, tau2=lambda^2, method="REML")) ####NEW!!!!
+    model.r1<-try(metafor::rma(z, vi, method="ML"))
+    model.r2<-try(metafor::rma(z, vi, method="REML"))
+  } else {
+    model.f1<-try(metafor::rma(z, vi, mods = mods, tau2=lambda^2, method="ML")) ####NEW!!!!
+    model.f2<-try(metafor::rma(z, vi, mods = mods, tau2=lambda^2, method="REML")) ####NEW!!!!
+    model.r1<-try(metafor::rma(z, vi, mods = mods, method="ML"))
+    model.r2<-try(metafor::rma(z, vi, mods = mods, method="REML"))
+  }
 
   if (sum(!class(model.r2)!="try-error")==0 ){
 

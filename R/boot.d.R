@@ -88,10 +88,17 @@ boot.d <- function(n1, n2, est, lambda = 0, model = 'random', adjust = FALSE, mo
   #########################################################################
   vi<-(n1+n2)/n1/n2+est^2/(2*(n1+n2))
 
-  model.f1<-try(metafor::rma(est, vi, mods = mods, tau2=lambda^2, method="ML"))
-  model.f2<-try(metafor::rma(est, vi, mods = mods, tau2=lambda^2, method="REML"))
-  model.r1<-try(metafor::rma(est, vi, mods = mods, method="ML"))
-  model.r2<-try(metafor::rma(est, vi, mods = mods, method="REML"))
+  if(is.null(mods)){
+    model.f1<-try(metafor::rma(est, vi, tau2=lambda^2, method="ML"))
+    model.f2<-try(metafor::rma(est, vi, tau2=lambda^2, method="REML"))
+    model.r1<-try(metafor::rma(est, vi, method="ML"))
+    model.r2<-try(metafor::rma(est, vi, method="REML"))
+  } else {
+    model.f1<-try(metafor::rma(est, vi, mods = mods, tau2=lambda^2, method="ML"))
+    model.f2<-try(metafor::rma(est, vi, mods = mods, tau2=lambda^2, method="REML"))
+    model.r1<-try(metafor::rma(est, vi, mods = mods, method="ML"))
+    model.r2<-try(metafor::rma(est, vi, mods = mods, method="REML"))
+  }
 
   if (sum(!class(model.r2)!="try-error")==0 ){
 

@@ -3,6 +3,7 @@ title: "A Bootstrap-Based Heterogeneity Test for Between-study Heterogeneity in 
 output: 
   #pdf_document
   html_document 
+  #word_document
 vignette: >
   %\VignetteIndexEntry{boot.heterogeneity}
   %\VignetteEngine{knitr::rmarkdown}

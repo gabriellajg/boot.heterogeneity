@@ -5,3 +5,5 @@ doc
 .Rhistory
 .RData
 .Ruserdata
+/doc/
+/Meta/

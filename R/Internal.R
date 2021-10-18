@@ -4,10 +4,18 @@ simulate.d<-function(nrep, d_overall, lambda, vi, n1, n2, mods){
   delta.s<-rnorm(length(n1), mean=d_overall, sd=lambda) ####NEW!!!!
   d.s<-stats::rnorm(length(n1),mean=delta.s, sd=sqrt(vi))
   vi.s<-(n1+n2)/n1/n2+d.s^2/(2*(n1+n2))
-  model.f1.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, tau2=lambda^2, method="ML"), silent = TRUE))
-  model.f2.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, tau2=lambda^2,method="REML"), silent = TRUE))
-  model.r1.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, method="ML"), silent = TRUE))
-  model.r2.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, method="REML"), silent = TRUE))
+
+  if(is.null(mods)){
+    model.f1.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, tau2=lambda^2, method="ML"), silent = TRUE))
+    model.f2.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, tau2=lambda^2,method="REML"), silent = TRUE))
+    model.r1.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, method="ML"), silent = TRUE))
+    model.r2.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, method="REML"), silent = TRUE))
+  } else {
+    model.f1.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, tau2=lambda^2, method="ML"), silent = TRUE))
+    model.f2.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, tau2=lambda^2,method="REML"), silent = TRUE))
+    model.r1.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, method="ML"), silent = TRUE))
+    model.r2.s<-suppressWarnings(try(metafor::rma(d.s, vi.s, mods = mods, method="REML"), silent = TRUE))
+  }
 
   #### NEW below!!!!
   if (sum(!class(model.r1.s)!="try-error" , !class(model.f1.s)!="try-error")==0){
@@ -42,10 +50,17 @@ simulate.z<-function(nrep, z_overall, lambda, vi, n, mods){
   delta.s<-rnorm(length(n), mean=z_overall, sd=lambda) ####NEW!!!!
   z.s<-stats::rnorm(length(n), mean = delta.s, sd = sqrt(vi))
   vi.s<- vi
-  model.f1.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, tau2=lambda^2, method="ML"), silent = TRUE))
-  model.f2.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, tau2=lambda^2,method="REML"), silent = TRUE))
-  model.r1.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, method="ML"), silent = TRUE))
-  model.r2.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, method="REML"), silent = TRUE))
+  if (is.null(mods)) {
+    model.f1.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, tau2=lambda^2, method="ML"), silent = TRUE))
+    model.f2.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, tau2=lambda^2,method="REML"), silent = TRUE))
+    model.r1.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, method="ML"), silent = TRUE))
+    model.r2.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, method="REML"), silent = TRUE))
+  } else {
+    model.f1.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, tau2=lambda^2, method="ML"), silent = TRUE))
+    model.f2.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, tau2=lambda^2,method="REML"), silent = TRUE))
+    model.r1.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, method="ML"), silent = TRUE))
+    model.r2.s<-suppressWarnings(try(metafor::rma(z.s, vi.s, mods = mods, method="REML"), silent = TRUE))
+  }
 
   #### NEW below!!!!
   if (sum(!class(model.r1.s)!="try-error" , !class(model.f1.s)!="try-error")==0){
@@ -119,10 +134,17 @@ simulate.OR<-function(nrep, lnOR_overall, lambda, vi, n, n_00_s, n_01_s, n_10_s,
     n_11_s <- df$n_11_s
   }
   #########################################################################
-  model.f1.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=lambda^2, method="ML"), silent = TRUE))
-  model.f2.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=lambda^2,method="REML"), silent = TRUE))
-  model.r1.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, method="ML"), silent = TRUE))
-  model.r2.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, method="REML"), silent = TRUE))
+  if(is.null(mods)){
+    model.f1.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, tau2=lambda^2, method="ML"), silent = TRUE))
+    model.f2.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, tau2=lambda^2,method="REML"), silent = TRUE))
+    model.r1.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, method="ML"), silent = TRUE))
+    model.r2.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, method="REML"), silent = TRUE))
+  } else {
+    model.f1.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=lambda^2, method="ML"), silent = TRUE))
+    model.f2.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, tau2=lambda^2,method="REML"), silent = TRUE))
+    model.r1.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, method="ML"), silent = TRUE))
+    model.r2.s<-suppressWarnings(try(metafor::rma(lnOR.s, vi.s, mods = mods, method="REML"), silent = TRUE))
+  }
 
   #### NEW below!!!!
   if (sum(!class(model.r1.s)!="try-error" , !class(model.f1.s)!="try-error")==0){
